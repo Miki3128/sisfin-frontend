@@ -1,0 +1,7 @@
+Informe técnico del plan de trabajo para el desarrollo del frontend del módulo SisFin.
+
+- Tecnología seleccionada: React JS + Tailwind CSS
+- Herramientas: Visual Studio Code, GitHub, Figma
+- Alcance: Módulo de registro, visualización y eliminación de usuarios
+- Estándares: Buenas prácticas en React, estructura modular, comentarios
+- Actividades: Diseño, codificación, pruebas
