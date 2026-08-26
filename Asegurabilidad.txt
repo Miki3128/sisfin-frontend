@@ -1,72 +1,20 @@
-def completar_historico(base_actual, base_anterior):
+    nueva_fila = {
+        # todos los campos...
+    }
 
-    indice_anterior = {}
+    nueva_fila["MODALIDAD POLIZA ACTUAL"] = nueva_fila["Modalidad_Seguro_Vida"]
+    nueva_fila["OB 3"] = "Aseg julio"
+    nueva_fila["OB MES"] = "Asegurado"
+    nueva_fila["FECHA INICIO"] = "-"
+    nueva_fila["FECHA FIN"] = "-"
+    nueva_fila["CERTIFICADO"] = "-"
+    nueva_fila["POLIZA ZURICH"] = "-"
 
-    # Crear índice de la base anterior por Crédito
-    for fila in base_anterior:
-        credito = fila["Crédito"].strip()
-        indice_anterior[credito] = fila
+    poliza_endosada = str(nueva_fila["Poliza Vida Endosada"]).strip().lower()
 
-    # Pasar histórico a la base actual
-    for fila in base_actual:
+    if "endos" in poliza_endosada:
+        nueva_fila["OBS EDWARD"] = "Endosada"
+    else:
+        nueva_fila["OBS EDWARD"] = "venta nueva julio"
 
-        credito = fila["Crédito"].strip()
-
-        if credito in indice_anterior:
-
-            anterior = indice_anterior[credito]
-
-            fila["OB ANTERIOR"] = anterior["OB 3"]
-            fila["OB DIC"] = anterior["OB MES"]
-            fila["FECHA INICIO"] = anterior["FECHA INICIO"]
-            fila["FECHA FN"] = anterior["FECHA FIN"]
-            fila["CERTIFICADO"] = anterior["CERTIFICADO"]
-            fila["POLIZA ZU"] = anterior["POLIZA ZU"]
-            fila["OBS EDW"] = anterior["OBS EDW"]
-
-    return base_actual
-
-for fila in base_asegurabilidad[:5]:
-    print(
-        fila["Crédito"],
-        "| OB ANTERIOR:", fila["OB ANTERIOR"],
-        "| OB DIC:", fila["OB DIC"],
-        "| FECHA INICIO:", fila["FECHA INICIO"],
-        "| FECHA FN:", fila["FECHA FN"],
-        "| CERTIFICADO:", fila["CERTIFICADO"],
-        "| POLIZA ZU:", fila["POLIZA ZU"],
-        "| OBS EDW:", fila["OBS EDW"]
-    )
-
-print("\n=== PRUEBA HISTÓRICO ===")
-
-for fila in base_asegurabilidad[:10]:
-    print(
-        fila["Crédito"],
-        "->",
-        fila["OB ANTERIOR"],
-        "|",
-        fila["OB DIC"],
-        "|",
-        fila["FECHA INICIO"],
-        "|",
-        fila["FECHA FN"],
-        "|",
-        fila["CERTIFICADO"],
-        "|",
-        fila["POLIZA ZU"],
-        "|",
-        fila["OBS EDW"]
-    )
-
-"OB ANTERIOR": "",
-"OB DIC": "",
-"FECHA INICIO": "",
-"FECHA FN": "",
-"CERTIFICADO": "",
-"POLIZA ZU": "",
-"OBS EDW": "",
-"MODALIDAD POLIZA ACTUAL": "",
-"OB 3": "",
-"OB MES": "",
-"FECHA FIN": "",
+    resultado.append(nueva_fila)
