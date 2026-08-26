@@ -1,0 +1,86 @@
+def crear_nuevos(r58, r21):
+
+    resultado = []
+
+    # Crear índice de R21 por crédito
+    indice_r21 = {}
+
+    for fila in r21:
+        credito = fila["NumCreditoBanco"].strip()
+        indice_r21[credito] = fila
+
+    for fila in r58:
+
+        credito = fila["Crédito"].strip()
+
+        # Solo créditos 830 y 834
+        if not (credito.startswith("830") or credito.startswith("834")):
+            continue
+
+        # Información de R21
+        datos_r21 = indice_r21.get(credito)
+
+        if datos_r21:
+            vigente = datos_r21["Vigente"]
+            mora = datos_r21["Dias Mora Historico"]
+            saldo = datos_r21["Saldo"]
+        else:
+            vigente = ""
+            mora = ""
+            saldo = ""
+
+        # Determinar tipo de préstamo y empresa
+        if credito.startswith("830"):
+            tipo_prestamo = "VEHICULO SAN"
+            empresa = "BCO"
+
+        else:
+            tipo_prestamo = "VEHICULO MAZ"
+            empresa = "MAZ"
+
+        nueva_fila = {
+
+            "INICIAL": credito[:3],
+
+            "TIPO PRESTAMO": tipo_prestamo,
+
+            "EMPRESA": empresa,
+
+            "CREDITO": credito,
+
+            "CEDULA": fila["Número Identificación"],
+
+            "ESTADO CREDITO": vigente,
+
+            "MORA": mora,
+
+            "SOLICITUD": fila["Solicitud"],
+
+            "FECHA DESEMBOLSO": fila["Fecha Desembolso"],
+
+            "NOMBRE": fila["Nombres"],
+
+            "VLR SEGURO VIDA FINANCIADO": fila["Vlr Seguro Vida Financiado"],
+
+            "VLR SEG DESEMPLEO SINGLE PREMIUM FINANCIADO": fila["Vlr Seg Desempleo Single Prendum Financiado"],
+
+            "SALDO": saldo,
+
+            "ESTADO CREDITO 2": "-",
+
+            "FECHA FINAL": fila["Fechafinal"],
+
+            "POLIZA VIDA ENDOSADA": fila["Poliza Vida Endosada"],
+
+            "MODALIDAD SEGURO VIDA": fila["Modalidad_Seguro_Vida"],
+
+            "PAGA POLIZA VIDA DESCONTADO": fila["Paga poliza Vida decontado"],
+
+            "TIPO GARANTIA": fila["Tipo_Garantia"],
+
+            "REESTRUCTURADO": "NO"
+        }
+
+        resultado.append(nueva_fila)
+
+    return resultado
