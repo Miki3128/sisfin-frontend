@@ -25,3 +25,15 @@ def completar_historico(base_actual, base_anterior):
             fila["OBS EDW"] = anterior["OBS EDW"]
 
     return base_actual
+
+for fila in base_asegurabilidad[:5]:
+    print(
+        fila["Crédito"],
+        "| OB ANTERIOR:", fila["OB ANTERIOR"],
+        "| OB DIC:", fila["OB DIC"],
+        "| FECHA INICIO:", fila["FECHA INICIO"],
+        "| FECHA FN:", fila["FECHA FN"],
+        "| CERTIFICADO:", fila["CERTIFICADO"],
+        "| POLIZA ZU:", fila["POLIZA ZU"],
+        "| OBS EDW:", fila["OBS EDW"]
+    )
