@@ -1,86 +1,27 @@
-def crear_nuevos(r58, r21):
+def completar_historico(base_actual, base_anterior):
 
-    resultado = []
+    indice_anterior = {}
 
-    # Crear índice de R21 por crédito
-    indice_r21 = {}
+    # Crear índice de la base anterior por Crédito
+    for fila in base_anterior:
+        credito = fila["Crédito"].strip()
+        indice_anterior[credito] = fila
 
-    for fila in r21:
-        credito = fila["NumCreditoBanco"].strip()
-        indice_r21[credito] = fila
-
-    for fila in r58:
+    # Pasar histórico a la base actual
+    for fila in base_actual:
 
         credito = fila["Crédito"].strip()
 
-        # Solo créditos 830 y 834
-        if not (credito.startswith("830") or credito.startswith("834")):
-            continue
+        if credito in indice_anterior:
 
-        # Buscar información del crédito en R21
-        datos_r21 = indice_r21.get(credito)
+            anterior = indice_anterior[credito]
 
-        if datos_r21:
-            estado_credito = datos_r21["Vigente"]
-            mora = datos_r21["Dias Mora Historico"]
-            saldo = datos_r21["Saldo"]
-        else:
-            estado_credito = ""
-            mora = ""
-            saldo = ""
+            fila["OB ANTERIOR"] = anterior["OB 3"]
+            fila["OB DIC"] = anterior["OB MES"]
+            fila["FECHA INICIO"] = anterior["FECHA INICIO"]
+            fila["FECHA FN"] = anterior["FECHA FIN"]
+            fila["CERTIFICADO"] = anterior["CERTIFICADO"]
+            fila["POLIZA ZU"] = anterior["POLIZA ZU"]
+            fila["OBS EDW"] = anterior["OBS EDW"]
 
-        # Determinar tipo de préstamo y empresa
-        if credito.startswith("830"):
-            tipo_prestamo = "VEHICULO SANTANDER"
-            empresa = "BCO"
-
-        else:
-            tipo_prestamo = "VEHICULO MAZ"
-            empresa = "MAZ"
-
-        nueva_fila = {
-
-            "INICIAL": credito[:3],
-
-            "TIPO PRESTAMO": tipo_prestamo,
-
-            "EMPRESA": empresa,
-
-            "Crédito": credito,
-
-            "Cedula": fila["Número Identificación"],
-
-            "Estado crèdito": estado_credito,
-
-            "Mora": mora,
-
-            "Solicitud": fila["Solicitud"],
-
-            "Fecha Desembolso": fila["Fecha Desembolso"],
-
-            "Nombres": fila["Nombres"],
-
-            "Vir Seguro Vida Financiado": fila["Vlr Seguro Vida Financiado"],
-
-            "Vir Seg Desempleo Single Premium Financiado": fila["Vlr Seg Desempleo Single Premium Financiado"],
-
-            "SALDO": saldo,
-
-            "ESTADO CREDITO": "-",
-
-            "Fechafinal": fila["Fechafinal"],
-
-            "Poliza Vida Endosada": fila["Poliza Vida Endosada"],
-
-            "Modalidad_Seguro_Vida": fila["Modalidad_Seguro_Vida"],
-
-            "Paga poliza Vida decontado": fila["Paga poliza Vida decontado"],
-
-            "Tipo_Garantia": fila["Tipo_Garantia"],
-
-            "RESTRUCTURADO": "NO"
-        }
-
-        resultado.append(nueva_fila)
-
-    return resultado
+    return base_actual
