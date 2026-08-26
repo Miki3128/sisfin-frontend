@@ -1,6 +1,40 @@
-  print("\n=== COLUMNAS BASE FINAL ===")
+import csv
+import sys
 
-for columna in base_asegurabilidad[0].keys():
-    print(columna)
+csv.field_size_limit(sys.maxsize)
 
-print("\nTotal columnas:", len(base_asegurabilidad[0]))
+
+def leer_csv(ruta):
+
+    registros = []
+
+    with open(ruta, encoding="utf-8-sig") as archivo:
+
+        lector = csv.DictReader(
+            archivo,
+            delimiter=";"
+        )
+
+        for fila in lector:
+            registros.append(fila)
+
+    return registros
+
+
+def guardar_csv(ruta, registros):
+
+    if not registros:
+        return
+
+    columnas = registros[0].keys()
+
+    with open(ruta, "w", newline="", encoding="utf-8-sig") as archivo:
+
+        escritor = csv.DictWriter(
+            archivo,
+            fieldnames=columnas,
+            delimiter=";"
+        )
+
+        escritor.writeheader()
+        escritor.writerows(registros)
