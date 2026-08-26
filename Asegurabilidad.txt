@@ -17,21 +17,21 @@ def crear_nuevos(r58, r21):
         if not (credito.startswith("830") or credito.startswith("834")):
             continue
 
-        # Información de R21
+        # Buscar información del crédito en R21
         datos_r21 = indice_r21.get(credito)
 
         if datos_r21:
-            vigente = datos_r21["Vigente"]
+            estado_credito = datos_r21["Vigente"]
             mora = datos_r21["Dias Mora Historico"]
             saldo = datos_r21["Saldo"]
         else:
-            vigente = ""
+            estado_credito = ""
             mora = ""
             saldo = ""
 
         # Determinar tipo de préstamo y empresa
         if credito.startswith("830"):
-            tipo_prestamo = "VEHICULO SAN"
+            tipo_prestamo = "VEHICULO SANTANDER"
             empresa = "BCO"
 
         else:
@@ -46,39 +46,39 @@ def crear_nuevos(r58, r21):
 
             "EMPRESA": empresa,
 
-            "CREDITO": credito,
+            "Crédito": credito,
 
-            "CEDULA": fila["Número Identificación"],
+            "Cedula": fila["Número Identificación"],
 
-            "ESTADO CREDITO": vigente,
+            "Estado crèdito": estado_credito,
 
-            "MORA": mora,
+            "Mora": mora,
 
-            "SOLICITUD": fila["Solicitud"],
+            "Solicitud": fila["Solicitud"],
 
-            "FECHA DESEMBOLSO": fila["Fecha Desembolso"],
+            "Fecha Desembolso": fila["Fecha Desembolso"],
 
-            "NOMBRE": fila["Nombres"],
+            "Nombres": fila["Nombres"],
 
-            "VLR SEGURO VIDA FINANCIADO": fila["Vlr Seguro Vida Financiado"],
+            "Vir Seguro Vida Financiado": fila["Vlr Seguro Vida Financiado"],
 
-            "VLR SEG DESEMPLEO SINGLE PREMIUM FINANCIADO": fila["Vlr Seg Desempleo Single Prendum Financiado"],
+            "Vir Seg Desempleo Single Premium Financiado": fila["Vlr Seg Desempleo Single Premium Financiado"],
 
             "SALDO": saldo,
 
-            "ESTADO CREDITO 2": "-",
+            "ESTADO CREDITO": "-",
 
-            "FECHA FINAL": fila["Fechafinal"],
+            "Fechafinal": fila["Fechafinal"],
 
-            "POLIZA VIDA ENDOSADA": fila["Poliza Vida Endosada"],
+            "Poliza Vida Endosada": fila["Poliza Vida Endosada"],
 
-            "MODALIDAD SEGURO VIDA": fila["Modalidad_Seguro_Vida"],
+            "Modalidad_Seguro_Vida": fila["Modalidad_Seguro_Vida"],
 
-            "PAGA POLIZA VIDA DESCONTADO": fila["Paga poliza Vida decontado"],
+            "Paga poliza Vida decontado": fila["Paga poliza Vida decontado"],
 
-            "TIPO GARANTIA": fila["Tipo_Garantia"],
+            "Tipo_Garantia": fila["Tipo_Garantia"],
 
-            "REESTRUCTURADO": "NO"
+            "RESTRUCTURADO": "NO"
         }
 
         resultado.append(nueva_fila)
