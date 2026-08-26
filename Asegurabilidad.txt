@@ -37,3 +37,24 @@ for fila in base_asegurabilidad[:5]:
         "| POLIZA ZU:", fila["POLIZA ZU"],
         "| OBS EDW:", fila["OBS EDW"]
     )
+
+print("\n=== PRUEBA HISTÓRICO ===")
+
+for fila in base_asegurabilidad[:10]:
+    print(
+        fila["Crédito"],
+        "->",
+        fila["OB ANTERIOR"],
+        "|",
+        fila["OB DIC"],
+        "|",
+        fila["FECHA INICIO"],
+        "|",
+        fila["FECHA FN"],
+        "|",
+        fila["CERTIFICADO"],
+        "|",
+        fila["POLIZA ZU"],
+        "|",
+        fila["OBS EDW"]
+    )
