@@ -58,3 +58,15 @@ for fila in base_asegurabilidad[:10]:
         "|",
         fila["OBS EDW"]
     )
+
+"OB ANTERIOR": "",
+"OB DIC": "",
+"FECHA INICIO": "",
+"FECHA FN": "",
+"CERTIFICADO": "",
+"POLIZA ZU": "",
+"OBS EDW": "",
+"MODALIDAD POLIZA ACTUAL": "",
+"OB 3": "",
+"OB MES": "",
+"FECHA FIN": "",
