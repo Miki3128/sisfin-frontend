@@ -1,20 +1,6 @@
-    nueva_fila = {
-        # todos los campos...
-    }
+  print("\n=== COLUMNAS BASE FINAL ===")
 
-    nueva_fila["MODALIDAD POLIZA ACTUAL"] = nueva_fila["Modalidad_Seguro_Vida"]
-    nueva_fila["OB 3"] = "Aseg julio"
-    nueva_fila["OB MES"] = "Asegurado"
-    nueva_fila["FECHA INICIO"] = "-"
-    nueva_fila["FECHA FIN"] = "-"
-    nueva_fila["CERTIFICADO"] = "-"
-    nueva_fila["POLIZA ZURICH"] = "-"
+for columna in base_asegurabilidad[0].keys():
+    print(columna)
 
-    poliza_endosada = str(nueva_fila["Poliza Vida Endosada"]).strip().lower()
-
-    if "endos" in poliza_endosada:
-        nueva_fila["OBS EDWARD"] = "Endosada"
-    else:
-        nueva_fila["OBS EDWARD"] = "venta nueva julio"
-
-    resultado.append(nueva_fila)
+print("\nTotal columnas:", len(base_asegurabilidad[0]))
