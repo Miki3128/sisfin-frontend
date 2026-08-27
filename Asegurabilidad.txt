@@ -1,18 +1,66 @@
-meses = {
-    1: "enero",
-    2: "febrero",
-    3: "marzo",
-    4: "abril",
-    5: "mayo",
-    6: "junio",
-    7: "julio",
-    8: "agosto",
-    9: "septiembre",
-    10: "octubre",
-    11: "noviembre",
-    12: "diciembre"
-}
+def crear_empleados(r21, año, mes, nombre_mes):
 
-nombre_mes = meses[mes]
+    resultado = []
 
-print(f"\nProcesando información de {nombre_mes}...")
+    for fila in r21:
+
+        credito = str(fila["Crédito"]).strip()
+
+        tipo_prestamo = str(fila["TIPO PRESTAMO"]).strip().upper()
+        empresa = str(fila["EMPRESA"]).strip().upper()
+
+        # Control para identificar empleados
+        if (
+            credito.startswith("9")
+            and tipo_prestamo == "CONSUMO EMPLEADOS"
+            and empresa == "BCO"
+        ):
+
+            nueva_fila = {
+                "INICIAL": credito[:3],
+                "TIPO PRESTAMO": "CONSUMO EMPLEADOS",
+                "EMPRESA": "BCO",
+                "Cedula": fila["Cedula"],
+                "Crédito": credito,
+                "Estado crèdito": fila["Estado crèdito"],
+                "Mora": fila["Mora"],
+                "Solicitud": "0",
+                "Fecha Desembolso": fila["Fecha Desembolso"],
+                "Nombres": fila["Nombres"],
+                "Vir Seguro Vida Financiado": fila["Vir Seguro Vida Financiado"],
+                "Vir Seg Desempleo Single Premium Financiado": fila["Vir Seg Desempleo Single Premium Financiado"],
+                "SALDO": fila["SALDO"],
+                "ESTADO CREDITO": "-",
+                "Fechafinal": fila["Fechafinal"],
+                "Poliza Vida Endosada": fila["Poliza Vida Endosada"],
+                "Modalidad_Seguro_Vida": "Mensual",
+                "Paga poliza Vida decontado": "-",
+                "Tipo_Garantia": "-",
+                "RESTRUCTURADO": "NO",
+
+                # HISTÓRICO
+                "MODALIDAD POLIZA ACTUAL 2": "",
+                "OB ANTERIOR": "",
+                "OB DIC": "",
+                "FECHA INICIO 2": "",
+                "FECHA FN": "",
+                "CERTIFICADO 2": "",
+                "POLIZA ZURICH 2": "",
+                "OBS EDWARD 2": "",
+
+                # INFORMACIÓN ACTUAL
+                "MODALIDAD POLIZA ACTUAL": "Mensual",
+                "OB 3": f"Aseg {nombre_mes}",
+                "OB MES": "Asegurado",
+                "FECHA INICIO": "-",
+                "FECHA FIN": "-",
+                "CERTIFICADO": "-",
+                "POLIZA ZURICH": "-",
+                "OBS EDWARD": f"venta nueva {nombre_mes}"
+            }
+
+            resultado.append(nueva_fila)
+
+    print(f"\nEmpleados encontrados en R21: {len(resultado)}")
+
+    return resultado
