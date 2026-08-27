@@ -1,109 +1,68 @@
-from datetime import datetime
-import calendar
+import openpyxl
 
 
-def validar_r21_vs_asegurabilidad(r21, base_asegurabilidad, año, mes):
+def guardar_excel_con_cancelados(ruta, base_asegurabilidad, cancelados):
 
-    # Crear índice de créditos de la Base Asegurabilidad
-    creditos_asegurabilidad = set()
+    libro = openpyxl.Workbook()
 
-    for fila in base_asegurabilidad:
-        credito = str(fila["Crédito"]).strip()
+    # Hoja principal
+    hoja_principal = libro.active
+    hoja_principal.title = "Base Asegurabilidad"
 
-        if credito:
-            creditos_asegurabilidad.add(credito)
+    if base_asegurabilidad:
 
-    # Último día del mes que estamos trabajando
-    ultimo_dia = calendar.monthrange(año, mes)[1]
+        columnas = list(base_asegurabilidad[0].keys())
 
-    fecha_limite = datetime(año, mes, ultimo_dia)
-
-    encontrados = 0
-    no_encontrados = []
-
-    for fila in r21:
-
-        vigente = str(fila["Vigente"]).strip().upper()
-
-        # Solo créditos vigentes
-        if vigente != "SI":
-            continue
-
-        credito = str(fila["NumCreditoBanco"]).strip()
-
-        if not credito:
-            continue
-
-        # Validar fecha de desembolso
-        fecha_texto = str(fila["Fecha Desembolso"]).strip()
-
-        try:
-            fecha_desembolso = datetime.strptime(
-                fecha_texto,
-                "%d/%m/%Y"
-            )
-        except ValueError:
-            continue
-
-        # No validar créditos posteriores al mes trabajado
-        if fecha_desembolso > fecha_limite:
-            continue
-
-        # Buscar crédito en Base Asegurabilidad
-        if credito in creditos_asegurabilidad:
-            encontrados += 1
-        else:
-            no_encontrados.append({
-                "Crédito": credito,
-                "Fecha Desembolso": fecha_texto,
-                "Vigente": vigente
-            })
-
-    print("\n=== CONTROL R21 VS BASE ASEGURABILIDAD ===")
-
-    print(f"Créditos vigentes validados: {encontrados + len(no_encontrados)}")
-    print(f"Encontrados en Base Asegurabilidad: {encontrados}")
-    print(f"No encontrados: {len(no_encontrados)}")
-
-    if no_encontrados:
-
-        print("\n=== CRÉDITOS NO ENCONTRADOS ===")
-
-        for fila in no_encontrados:
-            print(
-                fila["Crédito"],
-                "-> Fecha:",
-                fila["Fecha Desembolso"]
+        for columna_numero, columna in enumerate(columnas, start=1):
+            hoja_principal.cell(
+                row=1,
+                column=columna_numero,
+                value=columna
             )
 
-    else:
+        for fila_numero, fila in enumerate(base_asegurabilidad, start=2):
 
-        print("\nTodos los créditos vigentes están en la Base Asegurabilidad.")
+            for columna_numero, columna in enumerate(columnas, start=1):
 
-    return no_encontrados
+                hoja_principal.cell(
+                    row=fila_numero,
+                    column=columna_numero,
+                    value=fila.get(columna, "")
+                )
 
-def separar_cancelados(base_asegurabilidad):
+    # Hoja Cancelado
+    hoja_cancelado = libro.create_sheet("Cancelado")
 
-    base_activa = []
-    cancelados = []
+    if cancelados:
 
-    for fila in base_asegurabilidad:
+        columnas_cancelado = list(cancelados[0].keys())
 
-        estado = str(fila.get("Estado crèdito", "")).strip().upper()
+        for columna_numero, columna in enumerate(
+            columnas_cancelado,
+            start=1
+        ):
 
-        if estado == "NO":
+            hoja_cancelado.cell(
+                row=1,
+                column=columna_numero,
+                value=columna
+            )
 
-            fila_cancelada = fila.copy()
-            fila_cancelada["cancelacion"] = "Cancelado"
+        for fila_numero, fila in enumerate(cancelados, start=2):
 
-            cancelados.append(fila_cancelada)
+            for columna_numero, columna in enumerate(
+                columnas_cancelado,
+                start=1
+            ):
 
-        else:
+                hoja_cancelado.cell(
+                    row=fila_numero,
+                    column=columna_numero,
+                    value=fila.get(columna, "")
+                )
 
-            base_activa.append(fila)
+    libro.save(ruta)
 
-    print("\n=== CONTROL CANCELADOS ===")
-    print(f"Registros activos: {len(base_activa)}")
-    print(f"Registros cancelados: {len(cancelados)}")
-
-    return base_activa, cancelados
+    print(
+        f"\nBase Asegurabilidad Nueva guardada correctamente: {ruta}"
+    )
