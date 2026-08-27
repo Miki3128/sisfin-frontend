@@ -1,54 +1,18 @@
-# Control de fechas
+meses = {
+    1: "enero",
+    2: "febrero",
+    3: "marzo",
+    4: "abril",
+    5: "mayo",
+    6: "junio",
+    7: "julio",
+    8: "agosto",
+    9: "septiembre",
+    10: "octubre",
+    11: "noviembre",
+    12: "diciembre"
+}
 
-registros_corregidos = []
+nombre_mes = meses[mes]
 
-for fila in info:
-
-    fecha_inicio = fila["F. inicio Poliza"].strip()
-    fecha_cancelacion = fila["F. Efectiva cancela seguro"].strip()
-
-    if fecha_inicio and fecha_cancelacion:
-
-        inicio = datetime.strptime(fecha_inicio, "%d/%m/%Y")
-        cancelacion = datetime.strptime(fecha_cancelacion, "%d/%m/%Y")
-
-        # Si la cancelación es anterior al inicio,
-        # se corrige la cancelación con la fecha de inicio
-        if cancelacion < inicio:
-
-            Credito = fila["Credito"]
-
-            # Guardamos la información del cambio
-            registros_corregidos.append({
-                "Credito": Credito,
-                "fecha_inicio": fecha_inicio,
-                "fecha_cancelacion_original": fecha_cancelacion,
-                "fecha_cancelacion_corregida": fecha_inicio
-            })
-
-            # CORREGIR LA FECHA EN INFO
-            fila["F. Efectiva cancela seguro"] = fecha_inicio
-
-
-print("\nCONTROL DE FECHAS")
-
-if registros_corregidos:
-
-    print(
-        "Se encontraron",
-        len(registros_corregidos),
-        "registros con fecha corregida."
-    )
-
-    for registro in registros_corregidos:
-
-        print(
-            "Credito:", registro["Credito"],
-            "| Inicio:", registro["fecha_inicio"],
-            "| Cancelación original:", registro["fecha_cancelacion_original"],
-            "| Cancelación corregida:", registro["fecha_cancelacion_corregida"]
-        )
-
-else:
-
-    print("No se encontraron errores de fechas.")
+print(f"\nProcesando información de {nombre_mes}...")
