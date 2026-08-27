@@ -81,3 +81,29 @@ def validar_r21_vs_asegurabilidad(r21, base_asegurabilidad, año, mes):
         print("\nTodos los créditos vigentes están en la Base Asegurabilidad.")
 
     return no_encontrados
+
+def separar_cancelados(base_asegurabilidad):
+
+    base_activa = []
+    cancelados = []
+
+    for fila in base_asegurabilidad:
+
+        estado = str(fila.get("Estado crèdito", "")).strip().upper()
+
+        if estado == "NO":
+
+            fila_cancelada = fila.copy()
+            fila_cancelada["cancelacion"] = "Cancelado"
+
+            cancelados.append(fila_cancelada)
+
+        else:
+
+            base_activa.append(fila)
+
+    print("\n=== CONTROL CANCELADOS ===")
+    print(f"Registros activos: {len(base_activa)}")
+    print(f"Registros cancelados: {len(cancelados)}")
+
+    return base_activa, cancelados
