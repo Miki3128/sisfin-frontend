@@ -1,68 +1,38 @@
-import openpyxl
+def separar_cancelados(base_asegurabilidad):
 
+    base_activa = []
+    cancelados = []
 
-def guardar_excel_con_cancelados(ruta, base_asegurabilidad, cancelados):
+    for fila in base_asegurabilidad:
 
-    libro = openpyxl.Workbook()
+        estado = str(
+            fila.get("Estado crèdito", "")
+        ).strip().upper()
 
-    # Hoja principal
-    hoja_principal = libro.active
-    hoja_principal.title = "Base Asegurabilidad"
+        if estado == "NO":
 
-    if base_asegurabilidad:
+            fila_cancelada = fila.copy()
 
-        columnas = list(base_asegurabilidad[0].keys())
+            # Mantener Estado crèdito como NO
+            fila_cancelada["Estado crèdito"] = "NO"
 
-        for columna_numero, columna in enumerate(columnas, start=1):
-            hoja_principal.cell(
-                row=1,
-                column=columna_numero,
-                value=columna
-            )
+            # Agregar columna adicional al final
+            fila_cancelada["cancelacion"] = "Cancelado"
 
-        for fila_numero, fila in enumerate(base_asegurabilidad, start=2):
+            cancelados.append(fila_cancelada)
 
-            for columna_numero, columna in enumerate(columnas, start=1):
+        else:
 
-                hoja_principal.cell(
-                    row=fila_numero,
-                    column=columna_numero,
-                    value=fila.get(columna, "")
-                )
+            base_activa.append(fila)
 
-    # Hoja Cancelado
-    hoja_cancelado = libro.create_sheet("Cancelado")
-
-    if cancelados:
-
-        columnas_cancelado = list(cancelados[0].keys())
-
-        for columna_numero, columna in enumerate(
-            columnas_cancelado,
-            start=1
-        ):
-
-            hoja_cancelado.cell(
-                row=1,
-                column=columna_numero,
-                value=columna
-            )
-
-        for fila_numero, fila in enumerate(cancelados, start=2):
-
-            for columna_numero, columna in enumerate(
-                columnas_cancelado,
-                start=1
-            ):
-
-                hoja_cancelado.cell(
-                    row=fila_numero,
-                    column=columna_numero,
-                    value=fila.get(columna, "")
-                )
-
-    libro.save(ruta)
-
+    print("\n=== CONTROL CANCELADOS ===")
     print(
-        f"\nBase Asegurabilidad Nueva guardada correctamente: {ruta}"
+        f"Registros que permanecen en la base: "
+        f"{len(base_activa)}"
     )
+    print(
+        f"Registros enviados a Cancelado: "
+        f"{len(cancelados)}"
+    )
+
+    return base_activa, cancelados
