@@ -1,6 +1,5 @@
-def separar_cancelados(base_asegurabilidad):
+def obtener_cancelados(base_asegurabilidad):
 
-    base_activa = []
     cancelados = []
 
     for fila in base_asegurabilidad:
@@ -13,26 +12,38 @@ def separar_cancelados(base_asegurabilidad):
 
             fila_cancelada = fila.copy()
 
-            # Mantener Estado crèdito como NO
-            fila_cancelada["Estado crèdito"] = "NO"
-
-            # Agregar columna adicional al final
+            # No modificar ninguna columna existente.
+            # Solo agregar la nueva columna al final.
             fila_cancelada["cancelacion"] = "Cancelado"
 
             cancelados.append(fila_cancelada)
 
-        else:
-
-            base_activa.append(fila)
-
     print("\n=== CONTROL CANCELADOS ===")
-    print(
-        f"Registros que permanecen en la base: "
-        f"{len(base_activa)}"
-    )
-    print(
-        f"Registros enviados a Cancelado: "
-        f"{len(cancelados)}"
-    )
+    print(f"Registros cancelados: {len(cancelados)}")
 
-    return base_activa, cancelados
+    return cancelados
+
+
+
+
+Main
+
+
+from validaciones import (
+    validar_r21_vs_asegurabilidad,
+    obtener_cancelados
+)
+
+
+
+cancelados = obtener_cancelados(
+    base_asegurabilidad
+)
+
+
+
+guardar_csv(
+    configuracion.CANCELADOS,
+    cancelados
+)
+
