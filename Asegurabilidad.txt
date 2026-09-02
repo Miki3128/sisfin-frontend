@@ -1,49 +1,40 @@
-def obtener_cancelados(base_asegurabilidad):
-
-    cancelados = []
-
-    for fila in base_asegurabilidad:
-
-        estado = str(
-            fila.get("Estado crèdito", "")
-        ).strip().upper()
-
-        if estado == "NO":
-
-            fila_cancelada = fila.copy()
-
-            # No modificar ninguna columna existente.
-            # Solo agregar la nueva columna al final.
-            fila_cancelada["cancelacion"] = "Cancelado"
-
-            cancelados.append(fila_cancelada)
-
-    print("\n=== CONTROL CANCELADOS ===")
-    print(f"Registros cancelados: {len(cancelados)}")
-
-    return cancelados
+def completar_historico(base_actual, base_anterior):
+    # TU FUNCIÓN ACTUAL
+    # ...
+    return base_actual
 
 
+def agregar_creditos_anteriores(base_nueva, base_anterior):
 
+    creditos_nuevos = set()
 
-Main
+    for fila in base_nueva:
+        credito = str(fila.get("Crédito", "")).strip()
 
+        if credito:
+            creditos_nuevos.add(credito)
 
-from validaciones import (
-    validar_r21_vs_asegurabilidad,
-    obtener_cancelados
-)
+    agregados = 0
+    repetidos = 0
 
+    for fila in base_anterior:
 
+        credito = str(fila.get("Crédito", "")).strip()
 
-cancelados = obtener_cancelados(
-    base_asegurabilidad
-)
+        if not credito:
+            continue
 
+        if credito in creditos_nuevos:
+            repetidos += 1
 
+        else:
+            base_nueva.append(fila.copy())
+            creditos_nuevos.add(credito)
+            agregados += 1
 
-guardar_csv(
-    configuracion.CANCELADOS,
-    cancelados
-)
+    print("\n=== CRÉDITOS BASE ANTERIOR ===")
+    print(f"Créditos ya existentes: {repetidos}")
+    print(f"Créditos antiguos agregados: {agregados}")
+    print(f"Total base nueva: {len(base_nueva)}")
 
+    return base_nueva
