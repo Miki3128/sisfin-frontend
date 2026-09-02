@@ -1,11 +1,6 @@
-def completar_historico(base_actual, base_anterior):
-    # TU FUNCIÓN ACTUAL
-    # ...
-    return base_actual
-
-
 def agregar_creditos_anteriores(base_nueva, base_anterior):
 
+    # Crear índice con los créditos que ya existen en la base nueva
     creditos_nuevos = set()
 
     for fila in base_nueva:
@@ -17,6 +12,7 @@ def agregar_creditos_anteriores(base_nueva, base_anterior):
     agregados = 0
     repetidos = 0
 
+    # Revisar los créditos de la base anterior
     for fila in base_anterior:
 
         credito = str(fila.get("Crédito", "")).strip()
@@ -24,13 +20,70 @@ def agregar_creditos_anteriores(base_nueva, base_anterior):
         if not credito:
             continue
 
+        # Si ya existe en la nueva, no lo agregamos
         if credito in creditos_nuevos:
             repetidos += 1
+            continue
 
-        else:
-            base_nueva.append(fila.copy())
-            creditos_nuevos.add(credito)
-            agregados += 1
+        # Copiar la fila completa
+        nueva_fila = fila.copy()
+
+        # -------------------------------------------------
+        # MOVER INFORMACIÓN ANTERIOR AL HISTÓRICO
+        # -------------------------------------------------
+
+        nueva_fila["MODALIDAD POLIZA ACTUAL 2"] = fila.get(
+            "MODALIDAD POLIZA ACTUAL", ""
+        )
+
+        nueva_fila["OB ANTERIOR"] = fila.get(
+            "OB 3", ""
+        )
+
+        nueva_fila["OB DIC"] = fila.get(
+            "OB MES", ""
+        )
+
+        nueva_fila["FECHA INICIO 2"] = fila.get(
+            "FECHA INICIO", ""
+        )
+
+        nueva_fila["FECHA FN"] = fila.get(
+            "FECHA FIN", ""
+        )
+
+        nueva_fila["CERTIFICADO 2"] = fila.get(
+            "CERTIFICADO", ""
+        )
+
+        nueva_fila["POLIZA ZURICH 2"] = fila.get(
+            "POLIZA ZURICH", ""
+        )
+
+        nueva_fila["OBS EDWARD 2"] = fila.get(
+            "OBS EDWARD", ""
+        )
+
+        # -------------------------------------------------
+        # DEJAR VACÍAS LAS COLUMNAS DEL NUEVO PERÍODO
+        # -------------------------------------------------
+
+        nueva_fila["MODALIDAD POLIZA ACTUAL"] = ""
+        nueva_fila["OB 3"] = ""
+        nueva_fila["OB MES"] = ""
+        nueva_fila["FECHA INICIO"] = ""
+        nueva_fila["FECHA FIN"] = ""
+        nueva_fila["CERTIFICADO"] = ""
+        nueva_fila["POLIZA ZURICH"] = ""
+        nueva_fila["OBS EDWARD"] = ""
+
+        # Agregar el crédito a la nueva base
+        base_nueva.append(nueva_fila)
+
+        # Actualizar índice para evitar duplicados
+        creditos_nuevos.add(credito)
+
+        agregados += 1
 
     print("\n=== CRÉDITOS BASE ANTERIOR ===")
     print(f"Créditos ya existentes: {repetidos}")
