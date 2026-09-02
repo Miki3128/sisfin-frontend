@@ -1,86 +1,87 @@
- # =================================================
-        # INFORMACIÓN GENERAL
-        # =================================================
+ def agregar_creditos_anteriores(base_nueva, base_anterior):
 
-        nueva_fila["INICIAL"] = fila.get("INICIAL", "")
-        nueva_fila["TIPO PRESTAMO"] = fila.get("TIPO PRESTAMO", "")
-        nueva_fila["EMPRESA"] = fila.get("EMPRESA", "")
-        nueva_fila["Crédito"] = fila.get("Crédito", "")
-        nueva_fila["Cedula"] = fila.get("Cedula", "")
-        nueva_fila["Estado crèdito"] = fila.get("Estado crèdito", "")
-        nueva_fila["Mora"] = fila.get("Mora", "")
-        nueva_fila["Solicitud"] = fila.get("Solicitud", "")
-        nueva_fila["Fecha Desembolso"] = fila.get("Fecha Desembolso", "")
-        nueva_fila["Nombres"] = fila.get("Nombres", "")
-        nueva_fila["Vlr Seguro Vida Financiado"] = fila.get(
-            "Vlr Seguro Vida Financiado", ""
-        )
-        nueva_fila["Vlr Seg Desempleo Single Premium Financiado"] = fila.get(
-            "Vlr Seg Desempleo Single Premium Financiado", ""
-        )
-        nueva_fila["SALDO"] = fila.get("SALDO", "")
-        nueva_fila["ESTADO CREDITO"] = fila.get("ESTADO CREDITO", "")
-        nueva_fila["Fechafinal"] = fila.get("Fechafinal", "")
-        nueva_fila["Poliza Vida Endosada"] = fila.get("Poliza Vida Endosada", "")
-        nueva_fila["Modalidad_Seguro_Vida"] = fila.get(
-            "Modalidad_Seguro_Vida", ""
-        )
-        nueva_fila["Paga poliza Vida decontado"] = fila.get(
-            "Paga poliza Vida decontado", ""
-        )
-        nueva_fila["Tipo_Garantia"] = fila.get("Tipo_Garantia", "")
-        nueva_fila["RESTRUCTURADO"] = fila.get("RESTRUCTURADO", "")
+    # Créditos que ya están en la nueva base
+    creditos_nuevos = set()
 
-        # =================================================
-        # INFORMACIÓN HISTÓRICA
-        # =================================================
+    for fila in base_nueva:
+        credito = str(fila.get("Crédito", "")).strip()
 
-        nueva_fila["MODALIDAD POLIZA ACTUAL 2"] = fila.get(
-            "MODALIDAD POLIZA ACTUAL", ""
-        )
+        if credito:
+            creditos_nuevos.add(credito)
 
-        nueva_fila["OB ANTERIOR"] = fila.get(
-            "OB 3", ""
-        )
+    agregados = 0
+    repetidos = 0
 
-        nueva_fila["OB DIC"] = fila.get(
-            "OB MES", ""
-        )
+    for fila in base_anterior:
 
-        nueva_fila["FECHA INICIO 2"] = fila.get(
-            "FECHA INICIO", ""
-        )
+        credito = str(fila.get("Crédito", "")).strip()
 
-        nueva_fila["FECHA FN"] = fila.get(
-            "FECHA FIN", ""
-        )
+        if not credito:
+            continue
 
-        nueva_fila["CERTIFICADO 2"] = fila.get(
-            "CERTIFICADO", ""
-        )
+        # Si el crédito ya está en la nueva base, no lo agregamos
+        if credito in creditos_nuevos:
+            repetidos += 1
+            continue
 
-        nueva_fila["POLIZA ZURICH 2"] = fila.get(
-            "POLIZA ZURICH", ""
-        )
+        # =====================================================
+        # CREAR LA FILA CON EXACTAMENTE LAS COLUMNAS DE LA BASE
+        # =====================================================
 
-        nueva_fila["OBS EDWARD 2"] = fila.get(
-            "OBS EDWARD", ""
-        )
+        nueva_fila = {
+            "INICIAL": fila.get("INICIAL", ""),
+            "TIPO PRESTAMO": fila.get("TIPO PRESTAMO", ""),
+            "EMPRESA": fila.get("EMPRESA", ""),
+            "Crédito": fila.get("Crédito", ""),
+            "Cedula": fila.get("Cedula", ""),
+            "Estado crèdito": fila.get("Estado crèdito", ""),
+            "Mora": fila.get("Mora", ""),
+            "Solicitud": fila.get("Solicitud", ""),
+            "Fecha Desembolso": fila.get("Fecha Desembolso", ""),
+            "Nombres": fila.get("Nombres", ""),
+            "Vlr Seguro Vida Financiado": fila.get(
+                "Vlr Seguro Vida Financiado", ""
+            ),
+            "Vlr Seg Desempleo Single Premium Financiado": fila.get(
+                "Vlr Seg Desempleo Single Premium Financiado", ""
+            ),
+            "SALDO": fila.get("SALDO", ""),
+            "ESTADO CREDITO": fila.get("ESTADO CREDITO", ""),
+            "Fechafinal": fila.get("Fechafinal", ""),
+            "Poliza Vida Endosada": fila.get("Poliza Vida Endosada", ""),
+            "Modalidad_Seguro_Vida": fila.get(
+                "Modalidad_Seguro_Vida", ""
+            ),
+            "Paga poliza Vida decontado": fila.get(
+                "Paga poliza Vida decontado", ""
+            ),
+            "Tipo_Garantia": fila.get("Tipo_Garantia", ""),
+            "RESTRUCTURADO": fila.get("RESTRUCTURADO", ""),
 
-        # =================================================
-        # INFORMACIÓN DEL NUEVO PERÍODO
-        # =================================================
+            # HISTÓRICO
+            "MODALIDAD POLIZA ACTUAL 2": fila.get(
+                "MODALIDAD POLIZA ACTUAL", ""
+            ),
+            "OB ANTERIOR": fila.get("OB 3", ""),
+            "OB DIC": fila.get("OB MES", ""),
+            "FECHA INICIO 2": fila.get("FECHA INICIO", ""),
+            "FECHA FN": fila.get("FECHA FIN", ""),
+            "CERTIFICADO 2": fila.get("CERTIFICADO", ""),
+            "POLIZA ZURICH 2": fila.get("POLIZA ZURICH", ""),
+            "OBS EDWARD 2": fila.get("OBS EDWARD", ""),
 
-        nueva_fila["MODALIDAD POLIZA ACTUAL"] = ""
-        nueva_fila["OB 3"] = ""
-        nueva_fila["OB MES"] = ""
-        nueva_fila["FECHA INICIO"] = ""
-        nueva_fila["FECHA FIN"] = ""
-        nueva_fila["CERTIFICADO"] = ""
-        nueva_fila["POLIZA ZURICH"] = ""
-        nueva_fila["OBS EDWARD"] = ""
+            # NUEVO PERÍODO: quedan vacías
+            "MODALIDAD POLIZA ACTUAL": "",
+            "OB 3": "",
+            "OB MES": "",
+            "FECHA INICIO": "",
+            "FECHA FIN": "",
+            "CERTIFICADO": "",
+            "POLIZA ZURICH": "",
+            "OBS EDWARD": ""
+        }
 
-        # Agregar la fila completa a la nueva base
+        # Agregar el crédito completo
         base_nueva.append(nueva_fila)
 
         creditos_nuevos.add(credito)
