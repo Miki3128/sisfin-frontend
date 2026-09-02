@@ -1,36 +1,39 @@
-def agregar_creditos_anteriores(base_nueva, base_anterior):
+ # =================================================
+        # INFORMACIÓN GENERAL
+        # =================================================
 
-    # Crear índice con los créditos que ya existen en la base nueva
-    creditos_nuevos = set()
+        nueva_fila["INICIAL"] = fila.get("INICIAL", "")
+        nueva_fila["TIPO PRESTAMO"] = fila.get("TIPO PRESTAMO", "")
+        nueva_fila["EMPRESA"] = fila.get("EMPRESA", "")
+        nueva_fila["Crédito"] = fila.get("Crédito", "")
+        nueva_fila["Cedula"] = fila.get("Cedula", "")
+        nueva_fila["Estado crèdito"] = fila.get("Estado crèdito", "")
+        nueva_fila["Mora"] = fila.get("Mora", "")
+        nueva_fila["Solicitud"] = fila.get("Solicitud", "")
+        nueva_fila["Fecha Desembolso"] = fila.get("Fecha Desembolso", "")
+        nueva_fila["Nombres"] = fila.get("Nombres", "")
+        nueva_fila["Vlr Seguro Vida Financiado"] = fila.get(
+            "Vlr Seguro Vida Financiado", ""
+        )
+        nueva_fila["Vlr Seg Desempleo Single Premium Financiado"] = fila.get(
+            "Vlr Seg Desempleo Single Premium Financiado", ""
+        )
+        nueva_fila["SALDO"] = fila.get("SALDO", "")
+        nueva_fila["ESTADO CREDITO"] = fila.get("ESTADO CREDITO", "")
+        nueva_fila["Fechafinal"] = fila.get("Fechafinal", "")
+        nueva_fila["Poliza Vida Endosada"] = fila.get("Poliza Vida Endosada", "")
+        nueva_fila["Modalidad_Seguro_Vida"] = fila.get(
+            "Modalidad_Seguro_Vida", ""
+        )
+        nueva_fila["Paga poliza Vida decontado"] = fila.get(
+            "Paga poliza Vida decontado", ""
+        )
+        nueva_fila["Tipo_Garantia"] = fila.get("Tipo_Garantia", "")
+        nueva_fila["RESTRUCTURADO"] = fila.get("RESTRUCTURADO", "")
 
-    for fila in base_nueva:
-        credito = str(fila.get("Crédito", "")).strip()
-
-        if credito:
-            creditos_nuevos.add(credito)
-
-    agregados = 0
-    repetidos = 0
-
-    # Revisar los créditos de la base anterior
-    for fila in base_anterior:
-
-        credito = str(fila.get("Crédito", "")).strip()
-
-        if not credito:
-            continue
-
-        # Si ya existe en la nueva, no lo agregamos
-        if credito in creditos_nuevos:
-            repetidos += 1
-            continue
-
-        # Copiar la fila completa
-        nueva_fila = fila.copy()
-
-        # -------------------------------------------------
-        # MOVER INFORMACIÓN ANTERIOR AL HISTÓRICO
-        # -------------------------------------------------
+        # =================================================
+        # INFORMACIÓN HISTÓRICA
+        # =================================================
 
         nueva_fila["MODALIDAD POLIZA ACTUAL 2"] = fila.get(
             "MODALIDAD POLIZA ACTUAL", ""
@@ -64,9 +67,9 @@ def agregar_creditos_anteriores(base_nueva, base_anterior):
             "OBS EDWARD", ""
         )
 
-        # -------------------------------------------------
-        # DEJAR VACÍAS LAS COLUMNAS DEL NUEVO PERÍODO
-        # -------------------------------------------------
+        # =================================================
+        # INFORMACIÓN DEL NUEVO PERÍODO
+        # =================================================
 
         nueva_fila["MODALIDAD POLIZA ACTUAL"] = ""
         nueva_fila["OB 3"] = ""
@@ -77,12 +80,10 @@ def agregar_creditos_anteriores(base_nueva, base_anterior):
         nueva_fila["POLIZA ZURICH"] = ""
         nueva_fila["OBS EDWARD"] = ""
 
-        # Agregar el crédito a la nueva base
+        # Agregar la fila completa a la nueva base
         base_nueva.append(nueva_fila)
 
-        # Actualizar índice para evitar duplicados
         creditos_nuevos.add(credito)
-
         agregados += 1
 
     print("\n=== CRÉDITOS BASE ANTERIOR ===")
