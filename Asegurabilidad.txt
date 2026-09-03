@@ -1,21 +1,22 @@
-mes_produccion = mes - 2
+def ajustar_ventas_nuevas_vigentes(base_asegurabilidad, mes_venta_nueva):
 
-if mes_produccion <= 0:
-    mes_produccion += 12
+    texto_buscar = f"Aseg {mes_venta_nueva}"
 
-meses_cortos = {
-    1: "ene",
-    2: "feb",
-    3: "mar",
-    4: "abr",
-    5: "may",
-    6: "jun",
-    7: "jul",
-    8: "ago",
-    9: "sep",
-    10: "oct",
-    11: "nov",
-    12: "dic"
-}
+    for fila in base_asegurabilidad:
 
-mes_venta_nueva = meses_cortos[mes_produccion]
+        obs_edward = str(
+            fila.get("OBS EDWARD", "")
+        ).strip()
+
+        ob_anterior = str(
+            fila.get("OB ANTERIOR", "")
+        ).strip()
+
+        # Solo registros que vienen de la base Vigentes
+        if obs_edward == "Asegurado en base zurich":
+
+            if texto_buscar.lower() in ob_anterior.lower():
+
+                fila["OB 3"] = "Asegurado"
+
+    return base_asegurabilidad
