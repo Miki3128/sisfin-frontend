@@ -1,6 +1,21 @@
 def ajustar_ventas_nuevas_vigentes(base_asegurabilidad, mes_venta_nueva):
 
-    texto_buscar = f"Aseg {mes_venta_nueva}"
+    meses_numeros = {
+        "ene": 1,
+        "feb": 2,
+        "mar": 3,
+        "abr": 4,
+        "may": 5,
+        "jun": 6,
+        "jul": 7,
+        "ago": 8,
+        "sep": 9,
+        "oct": 10,
+        "nov": 11,
+        "dic": 12
+    }
+
+    mes_produccion = meses_numeros[mes_venta_nueva]
 
     for fila in base_asegurabilidad:
 
@@ -8,15 +23,27 @@ def ajustar_ventas_nuevas_vigentes(base_asegurabilidad, mes_venta_nueva):
             fila.get("OBS EDWARD", "")
         ).strip()
 
-        ob_anterior = str(
-            fila.get("OB ANTERIOR", "")
+        fecha_desembolso = str(
+            fila.get("Fecha Desembolso", "")
         ).strip()
 
-        # Solo registros que vienen de la base Vigentes
         if obs_edward == "Asegurado en base zurich":
 
-            if texto_buscar.lower() in ob_anterior.lower():
+            if fecha_desembolso:
 
-                fila["OB 3"] = "Asegurado"
+                try:
+                    partes = fecha_desembolso.split("/")
+
+                    if len(partes) == 3:
+
+                        mes_desembolso = int(partes[1])
+
+                        if mes_desembolso == mes_produccion:
+
+                            fila["OB 3"] = "Asegurado"
+                            fila["OB MES"] = fila.get("OB DIC", "")
+
+                except ValueError:
+                    pass
 
     return base_asegurabilidad
