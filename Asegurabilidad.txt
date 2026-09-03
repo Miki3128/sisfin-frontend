@@ -1,7 +1,8 @@
-fila["MODALIDAD POLIZA ACTUAL"] = "Mensual"
-fila["OB 3"] = "Asegurado Mensual"
-fila["OB MES"] = "Asegurado"
-fila["CERTIFICADO"] = certificado
-fila["FECHA INICIO"] = registro.get("Fecha Envio", "").strip()
-fila["FECHA FIN"] = registro.get("Fecha Envio Fin", "").strip()
-fila["OBS EDWARD"] = f"Asegurado {periodo_mes} mensual"
+base_vida_mensual_empleados = leer_csv(
+    configuracion.BASE_APLICACION_VIDA_MENSUAL_EMPLEADOS
+)
+
+print(
+    f"\nBase aplicación Vida Mensual empleados cargada correctamente "
+    f"({len(base_vida_mensual_empleados)} registros)"
+)
