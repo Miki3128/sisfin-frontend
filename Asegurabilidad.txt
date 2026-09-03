@@ -1,9 +1,12 @@
-print("\n=== PRUEBA CRÉDITOS ===")
+print("\n=== PRUEBA CRUCE DIRECTO ===")
 
-print("Base Asegurabilidad:")
-for fila in base_asegurabilidad[:5]:
-    print(repr(fila.get("Crédito")))
+credito_prueba = "91400000"
 
-print("\nBase Vida Mensual:")
-for fila in base_vida_mensual[:5]:
-    print(repr(fila.get("Crédito")))
+for fila in base_vida_mensual:
+    if str(fila.get("Crédito", "")).strip() == credito_prueba:
+        print("¡ENCONTRADO EN VIDA MENSUAL!")
+        print("Crédito:", repr(fila.get("Crédito")))
+        print("Certificado:", repr(fila.get("No Certificado VD")))
+        break
+else:
+    print("NO ENCONTRADO EN VIDA MENSUAL")
