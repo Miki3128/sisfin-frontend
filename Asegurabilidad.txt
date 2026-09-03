@@ -1,5 +1,5 @@
-"Estado crèdito": registro_r21.get("Estado crèdito", "") if registro_r21 else fila.get("Estado crèdito", ""),
-"Vlr Seguro Vida Financiado": registro_r21.get("Vlr Seguro Vida Financiado", "") if registro_r21 else fila.get("Vlr Seguro Vida Financiado", ""),
-"Vlr Seg Desempleo Single Premium Financiado": registro_r21.get("Vlr Seg Desempleo Single Premium Financiado", "") if registro_r21 else fila.get("Vlr Seg Desempleo Single Premium Financiado", ""),
-"SALDO": registro_r21.get("SALDO", "") if registro_r21 else fila.get("SALDO", ""),
-"ESTADO CREDITO": registro_r21.get("ESTADO CREDITO", "") if registro_r21 else fila.get("ESTADO CREDITO", ""),
+print(
+    "PRUEBA R21:",
+    credito,
+    registro_r21.get("Vigente", "") if registro_r21 else "NO ENCONTRADO"
+)
