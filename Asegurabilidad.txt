@@ -1,8 +1,45 @@
-base_vida_mensual = leer_csv(
-    configuracion.BASE_APLICACION_VIDA_MENSUAL
-)
+def cruzar_vida_mensual(base_asegurabilidad, base_vida_mensual):
 
-print(
-    f"\nBase aplicación Vida Mensual cargada correctamente "
-    f"({len(base_vida_mensual)} registros)"
-)
+    # Crear índice de Vida Mensual por Crédito
+    indice_vida_mensual = {}
+
+    for fila in base_vida_mensual:
+        credito = str(fila.get("Crédito", "")).strip()
+
+        if credito:
+            indice_vida_mensual[credito] = fila
+
+    encontrados = 0
+    no_encontrados = 0
+
+    # Cruzar contra Base Asegurabilidad
+    for fila in base_asegurabilidad:
+
+        credito = str(fila.get("Crédito", "")).strip()
+
+        if credito in indice_vida_mensual:
+
+            registro = indice_vida_mensual[credito]
+
+            certificado = str(
+                registro.get("No Certificado VD", "")
+            ).strip()
+
+            if certificado:
+
+                fila["MODALIDAD POLIZA ACTUAL"] = "Mensual"
+                fila["OB 3"] = "Asegurado Mensual"
+                fila["OB MES"] = "Asegurado"
+                fila["CERTIFICADO"] = certificado
+                fila["OBS EDWARD"] = "Asegurado (mes) mensual"
+
+                encontrados += 1
+
+        else:
+            no_encontrados += 1
+
+    print("\n=== CRUCE VIDA MENSUAL ===")
+    print(f"Créditos encontrados: {encontrados}")
+    print(f"Créditos no encontrados: {no_encontrados}")
+
+    return base_asegurabilidad
