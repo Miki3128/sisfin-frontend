@@ -1,32 +1,7 @@
-print("\n=== PRUEBA CRÉDITOS ===")
-
-print("Base Asegurabilidad:")
-for fila in base_asegurabilidad[:5]:
-    print(repr(fila.get("Crédito")))
-
-print("\nBase Vida Mensual:")
-for fila in base_vida_mensual[:5]:
-    print(repr(fila.get("Crédito")))
-
-
-print("\n=== PRUEBA INDICE VIDA MENSUAL ===")
-
-indice_prueba = {}
-
-for fila in base_vida_mensual:
-    credito = str(fila.get("Crédito", "")).strip()
-
-    if credito:
-        indice_prueba[credito] = fila
-
-print("¿91400000 está en el índice?:", "91400000" in indice_prueba)
-
-if "91400000" in indice_prueba:
-    print("Registro encontrado en índice:")
-    print(indice_prueba["91400000"])
-
-
-base_asegurabilidad = cruzar_vida_mensual(
-    base_asegurabilidad,
-    base_vida_mensual
-)
+fila["MODALIDAD POLIZA ACTUAL"] = "Mensual"
+fila["OB 3"] = "Asegurado Mensual"
+fila["OB MES"] = "Asegurado"
+fila["CERTIFICADO"] = certificado
+fila["FECHA INICIO"] = registro.get("Fecha Envio", "").strip()
+fila["FECHA FIN"] = registro.get("Fecha Envio Fin", "").strip()
+fila["OBS EDWARD"] = f"Asegurado {periodo_mes} mensual"
