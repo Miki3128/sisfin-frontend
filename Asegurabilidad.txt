@@ -1,12 +1,32 @@
-print("\n=== PRUEBA CRUCE DIRECTO ===")
+print("\n=== PRUEBA CRÉDITOS ===")
 
-credito_prueba = "91400000"
+print("Base Asegurabilidad:")
+for fila in base_asegurabilidad[:5]:
+    print(repr(fila.get("Crédito")))
+
+print("\nBase Vida Mensual:")
+for fila in base_vida_mensual[:5]:
+    print(repr(fila.get("Crédito")))
+
+
+print("\n=== PRUEBA INDICE VIDA MENSUAL ===")
+
+indice_prueba = {}
 
 for fila in base_vida_mensual:
-    if str(fila.get("Crédito", "")).strip() == credito_prueba:
-        print("¡ENCONTRADO EN VIDA MENSUAL!")
-        print("Crédito:", repr(fila.get("Crédito")))
-        print("Certificado:", repr(fila.get("No Certificado VD")))
-        break
-else:
-    print("NO ENCONTRADO EN VIDA MENSUAL")
+    credito = str(fila.get("Crédito", "")).strip()
+
+    if credito:
+        indice_prueba[credito] = fila
+
+print("¿91400000 está en el índice?:", "91400000" in indice_prueba)
+
+if "91400000" in indice_prueba:
+    print("Registro encontrado en índice:")
+    print(indice_prueba["91400000"])
+
+
+base_asegurabilidad = cruzar_vida_mensual(
+    base_asegurabilidad,
+    base_vida_mensual
+)
