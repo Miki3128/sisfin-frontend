@@ -1,45 +1,21 @@
-def cruzar_vigentes(base_asegurabilidad, base_vigentes):
+mes_produccion = mes - 2
 
-    indice_vigentes = {}
+if mes_produccion <= 0:
+    mes_produccion += 12
 
-    for fila in base_vigentes:
-        credito = str(fila.get("No Credito", "")).strip()
+meses_cortos = {
+    1: "ene",
+    2: "feb",
+    3: "mar",
+    4: "abr",
+    5: "may",
+    6: "jun",
+    7: "jul",
+    8: "ago",
+    9: "sep",
+    10: "oct",
+    11: "nov",
+    12: "dic"
+}
 
-        if credito:
-            indice_vigentes[credito] = fila
-
-    encontrados = 0
-    no_encontrados = 0
-
-    for fila in base_asegurabilidad:
-
-        credito = str(fila.get("Crédito", "")).strip()
-
-        if credito in indice_vigentes:
-
-            registro = indice_vigentes[credito]
-
-            certificado = str(
-                registro.get("NRO DOCUM", "")
-            ).strip()
-
-            if certificado:
-
-                fila["OB 3"] = fila.get("OB ANTERIOR", "")
-                fila["OB MES"] = fila.get("OB DIC", "")
-                fila["CERTIFICADO"] = certificado
-                fila["FECHA INICIO"] = registro.get("FECHA INI", "").strip()
-                fila["FECHA FIN"] = registro.get("FECHA FIN", "").strip()
-                fila["POLIZA ZURICH"] = registro.get("POL MAESTRA", "").strip()
-                fila["OBS EDWARD"] = "Asegurado en base zurich"
-
-                encontrados += 1
-
-        else:
-            no_encontrados += 1
-
-    print("\n=== CRUCE VIGENTES ===")
-    print(f"Créditos encontrados: {encontrados}")
-    print(f"Créditos no encontrados: {no_encontrados}")
-
-    return base_asegurabilidad
+mes_venta_nueva = meses_cortos[mes_produccion]
