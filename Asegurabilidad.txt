@@ -1,25 +1,67 @@
-def ajustar_mora_mayor_90_aumentos(base_asegurabilidad):
+def ajustar_fecha_fin_proxima(base_asegurabilidad, año, mes):
 
     procesados = 0
     no_procesados = 0
 
+    # Calculamos los 3 meses anteriores + el mes actual
+    meses_validos = []
+
+    for i in range(3, -1, -1):
+
+        mes_validar = mes - i
+        año_validar = año
+
+        if mes_validar <= 0:
+            mes_validar += 12
+            año_validar -= 1
+
+        meses_validos.append((año_validar, mes_validar))
+
     for fila in base_asegurabilidad:
 
-        mora_texto = str(
-            fila.get("Mora", "")
+        ob_mes_vigente = str(
+            fila.get("OB MES VIGENTE", "")
+        ).strip().lower()
+
+        # Solo revisar los que dicen Fecha Fin proxima
+        if ob_mes_vigente != "fecha fin proxima":
+            no_procesados += 1
+            continue
+
+        fecha_fin_texto = str(
+            fila.get("Fechafin", "")
         ).strip()
 
+        if not fecha_fin_texto:
+            no_procesados += 1
+            continue
+
         try:
-            mora = float(
-                mora_texto.replace(".", "").replace(",", ".")
+            fecha_fin = datetime.strptime(
+                fecha_fin_texto,
+                "%Y-%m-%d"
             )
+
         except ValueError:
-            mora = 0
+            try:
+                fecha_fin = datetime.strptime(
+                    fecha_fin_texto,
+                    "%d/%m/%Y"
+                )
 
-        if mora > 90:
+            except ValueError:
+                no_procesados += 1
+                continue
 
-            fila["OB 3"] = "Mora > 90"
-            fila["OB MES"] = "Politica - Mora > 90"
+        periodo_fecha_fin = (
+            fecha_fin.year,
+            fecha_fin.month
+        )
+
+        if periodo_fecha_fin in meses_validos:
+
+            fila["OB 3"] = "Credito finalizado"
+            fila["OB MES"] = "Politica - credito finalizado"
             fila["OBS EDWARD"] = "-"
 
             procesados += 1
@@ -27,7 +69,7 @@ def ajustar_mora_mayor_90_aumentos(base_asegurabilidad):
         else:
             no_procesados += 1
 
-    print("\n=== AJUSTE MORA MAYOR A 90 AUMENTOS CAPITAL ===")
+    print("\n=== AJUSTE FECHA FIN PROXIMA ===")
     print(f"Créditos procesados: {procesados}")
     print(f"Créditos no procesados: {no_procesados}")
 
