@@ -1,44 +1,60 @@
-def cruzar_base_endosos(base_asegurabilidad, base_endosos):
+def ajustar_poliza_vencida_endosos(base_asegurabilidad, año, mes):
 
-    indice_endosos = {}
-
-    for fila in base_endosos:
-
-        credito = str(
-            fila.get("No. Crédito", "")
-        ).strip()
-
-        if credito:
-            indice_endosos[credito] = fila
-
-    encontrados = 0
-    no_encontrados = 0
+    procesados = 0
+    no_procesados = 0
 
     for fila in base_asegurabilidad:
 
-        credito = str(
-            fila.get("Crédito", "")
+        # Solo revisar los que quedaron como Endosada
+        ob_mes = str(
+            fila.get("OB MES", "")
+        ).strip().lower()
+
+        if ob_mes != "endosada":
+            no_procesados += 1
+            continue
+
+        fecha_fin_texto = str(
+            fila.get("FECHA FIN", "")
         ).strip()
 
-        if credito in indice_endosos:
+        if not fecha_fin_texto:
+            no_procesados += 1
+            continue
 
-            registro = indice_endosos[credito]
+        try:
+            fecha_fin = datetime.strptime(
+                fecha_fin_texto,
+                "%Y-%m-%d"
+            )
 
-            fila["FECHA INICIO ENDOSOS"] = registro.get(
-                "FECHA INICIO", ""
-            ).strip()
+        except ValueError:
 
-            fila["FECHA FIN ENDOSOS"] = registro.get(
-                "FECHA FIN", ""
-            ).strip()
+            try:
+                fecha_fin = datetime.strptime(
+                    fecha_fin_texto,
+                    "%d/%m/%Y"
+                )
 
-            encontrados += 1
+            except ValueError:
+                no_procesados += 1
+                continue
+
+        # Validar que FECHA FIN sea del mes que estamos procesando
+        if (
+            fecha_fin.year == año
+            and fecha_fin.month == mes
+        ):
+
+            fila["CERTIFICADO"] = "Poliza Vencida"
+
+            procesados += 1
 
         else:
-            no_encontrados += 1
+            no_procesados += 1
 
-    print("\n=== CRUCE BASE ENDOSOS ===")
-    print(f"Créditos encontrados: {encontrados}")
-    print(f"Créditos no encontrados: {no_encontrados}")
+    print("\n=== AJUSTE POLIZA VENCIDA ENDOSOS ===")
+    print(f"Créditos procesados: {procesados}")
+    print(f"Créditos no procesados: {no_procesados}")
 
     return base_asegurabilidad
