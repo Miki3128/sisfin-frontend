@@ -1,70 +1,44 @@
-def ajustar_endosada(base_asegurabilidad, año, mes):
+def cruzar_base_endosos(base_asegurabilidad, base_endosos):
 
-    procesados = 0
-    no_procesados = 0
+    indice_endosos = {}
+
+    for fila in base_endosos:
+
+        credito = str(
+            fila.get("No. Crédito", "")
+        ).strip()
+
+        if credito:
+            indice_endosos[credito] = fila
+
+    encontrados = 0
+    no_encontrados = 0
 
     for fila in base_asegurabilidad:
 
-        # Primero: solo los que tienen Endoso en OB DIC
-        ob_dic = str(
-            fila.get("OB DIC", "")
-        ).strip().lower()
-
-        if ob_dic != "endoso":
-            no_procesados += 1
-            continue
-
-        fecha_fin_texto = str(
-            fila.get("FECHA FN", "")
+        credito = str(
+            fila.get("Crédito", "")
         ).strip()
 
-        if not fecha_fin_texto:
-            no_procesados += 1
-            continue
+        if credito in indice_endosos:
 
-        try:
-            fecha_fin = datetime.strptime(
-                fecha_fin_texto,
-                "%Y-%m-%d"
-            )
+            registro = indice_endosos[credito]
 
-        except ValueError:
+            fila["FECHA INICIO ENDOSOS"] = registro.get(
+                "FECHA INICIO", ""
+            ).strip()
 
-            try:
-                fecha_fin = datetime.strptime(
-                    fecha_fin_texto,
-                    "%d/%m/%Y"
-                )
+            fila["FECHA FIN ENDOSOS"] = registro.get(
+                "FECHA FIN", ""
+            ).strip()
 
-            except ValueError:
-                no_procesados += 1
-                continue
-
-        # La fecha debe ser desde el mes que estamos procesando
-        # en adelante
-        if (
-            fecha_fin.year > año
-            or (
-                fecha_fin.year == año
-                and fecha_fin.month >= mes
-            )
-        ):
-
-            fila["OB 3"] = "Endosada"
-            fila["OB MES"] = fila.get("OB DIC", "")
-            fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
-            fila["FECHA FIN"] = fila.get("FECHA FN", "")
-            fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
-            fila["POLIZA ZURICH"] = "-"
-            fila["OBS EDWARD"] = fila.get("OBS EDWARD 2", "")
-
-            procesados += 1
+            encontrados += 1
 
         else:
-            no_procesados += 1
+            no_encontrados += 1
 
-    print("\n=== AJUSTE ENDOSADA ===")
-    print(f"Créditos procesados: {procesados}")
-    print(f"Créditos no procesados: {no_procesados}")
+    print("\n=== CRUCE BASE ENDOSOS ===")
+    print(f"Créditos encontrados: {encontrados}")
+    print(f"Créditos no encontrados: {no_encontrados}")
 
     return base_asegurabilidad
