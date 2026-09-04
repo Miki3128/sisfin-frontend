@@ -1,4 +1,8 @@
-if credito == "812000000000":
-    print("=== CONTROL 812000000000 ===")
-    print("Vigente R21:", registro_r21.get("Vigente", "") if registro_r21 else "NO ENCONTRADO")
-    print("ESTADO ANTERIOR:", fila.get("ESTADO CREDITO", ""))
+modalidad_historica = str(
+    fila.get("MODALIDAD POLIZA ACTUAL 2", "")
+).strip().lower()
+
+if modalidad_historica == "mensual":
+    fila["VALIDACION VIGENTES"] = "Validar: Mensual con certificado Vigentes"
+else:
+    fila["VALIDACION VIGENTES"] = "Correcto"
