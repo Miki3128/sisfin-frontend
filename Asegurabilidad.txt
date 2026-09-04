@@ -1,10 +1,36 @@
-elif (
-    ob_dic == "politica - castigado"
-    and "castigado" not in estado_credito
-):
+def ajustar_creditos_finalizados(base_asegurabilidad):
 
-    fila["OB 3"] = "Forzar"
-    fila["OB MES"] = "Politica - forzar"
-    fila["OBS EDWARD"] = "Forzar"
+    procesados = 0
+    no_procesados = 0
 
-    procesados += 1
+    for fila in base_asegurabilidad:
+
+        # Si OBS EDWARD ya tiene información, no tocar el registro
+        if str(fila.get("OBS EDWARD", "")).strip():
+            continue
+
+        ob_dic = str(
+            fila.get("OB DIC", "")
+        ).strip().lower()
+
+        # Solo procesar Politica - credito finalizado
+        if ob_dic == "politica - credito finalizado":
+
+            fila["OB 3"] = fila.get("OB ANTERIOR", "")
+            fila["OB MES"] = "Politica - credito finalizado"
+            fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
+            fila["FECHA FIN"] = fila.get("FECHA FN", "")
+            fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
+            fila["POLIZA ZURICH"] = fila.get("POLIZA ZURICH 2", "")
+            fila["OBS EDWARD"] = fila.get("OBS EDWARD 2", "")
+
+            procesados += 1
+
+        else:
+            no_procesados += 1
+
+    print("\n=== AJUSTE CREDITOS FINALIZADOS ===")
+    print(f"Créditos procesados: {procesados}")
+    print(f"Créditos no procesados: {no_procesados}")
+
+    return base_asegurabilidad
