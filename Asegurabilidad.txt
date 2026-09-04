@@ -1,8 +1,53 @@
-modalidad_historica = str(
-    fila.get("MODALIDAD POLIZA ACTUAL 2", "")
-).strip().lower()
+def cruzar_certificado_historico_vigentes(base_asegurabilidad, base_vigentes):
 
-if modalidad_historica == "mensual":
-    fila["VALIDACION VIGENTES"] = "Validar: Mensual con certificado Vigentes"
-else:
-    fila["VALIDACION VIGENTES"] = "Correcto"
+    indice_vigentes = {}
+
+    for fila in base_vigentes:
+        certificado = str(
+            fila.get("NRO_DOCUM", "")
+        ).strip()
+
+        if certificado:
+            indice_vigentes[certificado] = fila
+
+    encontrados = 0
+    no_encontrados = 0
+
+    for fila in base_asegurabilidad:
+
+        # Solo procesar registros que todavía no tienen OBS EDWARD
+        if str(fila.get("OBS EDWARD", "")).strip():
+            continue
+
+        certificado_historico = str(
+            fila.get("CERTIFICADO 2", "")
+        ).strip()
+
+        if certificado_historico in indice_vigentes:
+
+            registro = indice_vigentes[certificado_historico]
+
+            fecha_inicio_vigentes = str(
+                registro.get("FECHA_INI", "")
+            ).strip()
+
+            if fecha_inicio_vigentes:
+
+                fila["OB 3"] = "Asegurado con fecha inicio y fin diferente"
+                fila["OB MES"] = "Asegurado"
+                fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
+                fila["FECHA FIN"] = fila.get("FECHA FN", "")
+                fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
+                fila["POLIZA ZURICH"] = registro.get("POL_MAESTRA", "").strip()
+                fila["OBS EDWARD"] = "Asegurado en base zurich"
+
+                encontrados += 1
+
+        else:
+            no_encontrados += 1
+
+    print("\n=== CRUCE CERTIFICADO HISTÓRICO VS VIGENTES ===")
+    print(f"Certificados encontrados: {encontrados}")
+    print(f"Certificados no encontrados: {no_encontrados}")
+
+    return base_asegurabilidad
