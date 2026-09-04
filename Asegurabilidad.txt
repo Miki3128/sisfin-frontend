@@ -1,4 +1,4 @@
-def ajustar_creditos_finalizados(base_asegurabilidad):
+def ajustar_mora_mayor_90(base_asegurabilidad):
 
     procesados = 0
     no_procesados = 0
@@ -13,11 +13,25 @@ def ajustar_creditos_finalizados(base_asegurabilidad):
             fila.get("OB DIC", "")
         ).strip().lower()
 
-        # Solo procesar Politica - credito finalizado
-        if ob_dic == "politica - credito finalizado":
+        # Obtener Mora
+        mora_texto = str(
+            fila.get("Mora", "")
+        ).strip()
+
+        try:
+            mora = float(mora_texto.replace(",", "."))
+        except ValueError:
+            mora = 0
+
+        # Solo procesar Politica - mora > 90
+        # cuando Mora sea mayor a 90
+        if (
+            ob_dic == "politica - mora > 90"
+            and mora > 90
+        ):
 
             fila["OB 3"] = fila.get("OB ANTERIOR", "")
-            fila["OB MES"] = "Politica - credito finalizado"
+            fila["OB MES"] = "Politica - mora > 90"
             fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
             fila["FECHA FIN"] = fila.get("FECHA FN", "")
             fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
@@ -29,7 +43,7 @@ def ajustar_creditos_finalizados(base_asegurabilidad):
         else:
             no_procesados += 1
 
-    print("\n=== AJUSTE CREDITOS FINALIZADOS ===")
+    print("\n=== AJUSTE MORA MAYOR A 90 ===")
     print(f"Créditos procesados: {procesados}")
     print(f"Créditos no procesados: {no_procesados}")
 
