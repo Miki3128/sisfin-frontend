@@ -1,7 +1,17 @@
-def ajustar_seguro_pu_finalizado(base_asegurabilidad):
+def cruzar_aumentos_capital(base_asegurabilidad, aumentos_capital):
 
-    procesados = 0
-    no_procesados = 0
+    indice_aumentos = {}
+
+    for fila in aumentos_capital:
+        credito = str(
+            fila.get("Crédito", "")
+        ).strip()
+
+        if credito:
+            indice_aumentos[credito] = fila
+
+    encontrados = 0
+    no_encontrados = 0
 
     for fila in base_asegurabilidad:
 
@@ -9,28 +19,26 @@ def ajustar_seguro_pu_finalizado(base_asegurabilidad):
         if str(fila.get("OBS EDWARD", "")).strip():
             continue
 
-        ob_dic = str(
-            fila.get("OB DIC", "")
-        ).strip().lower()
+        credito = str(
+            fila.get("Crédito", "")
+        ).strip()
 
-        # Solo procesar Politica - seguro PU Finalizado
-        if ob_dic == "politica - seguro pu finalizado":
+        if credito in indice_aumentos:
 
-            fila["OB 3"] = fila.get("OB ANTERIOR", "")
-            fila["OB MES"] = "Politica - seguro PU Finalizado"
-            fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
-            fila["FECHA FIN"] = fila.get("FECHA FN", "")
-            fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
-            fila["POLIZA ZURICH"] = fila.get("POLIZA ZURICH 2", "")
-            fila["OBS EDWARD"] = fila.get("OBS EDWARD 2", "")
+            registro = indice_aumentos[credito]
 
-            procesados += 1
+            # Traer OB MES VIGENTE de AUMENTOS CAPITAL
+            fila["OB MES VIGENTE"] = registro.get(
+                "OB MES VIGENTE", ""
+            ).strip()
+
+            encontrados += 1
 
         else:
-            no_procesados += 1
+            no_encontrados += 1
 
-    print("\n=== AJUSTE SEGURO PU FINALIZADO ===")
-    print(f"Créditos procesados: {procesados}")
-    print(f"Créditos no procesados: {no_procesados}")
+    print("\n=== CRUCE AUMENTOS CAPITAL ===")
+    print(f"Créditos encontrados: {encontrados}")
+    print(f"Créditos no encontrados: {no_encontrados}")
 
     return base_asegurabilidad
