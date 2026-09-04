@@ -1,4 +1,4 @@
-def ajustar_mora_mayor_90_aumentos(base_asegurabilidad):
+def ajustar_renovar_aumentos(base_asegurabilidad):
 
     procesados = 0
     no_procesados = 0
@@ -9,35 +9,18 @@ def ajustar_mora_mayor_90_aumentos(base_asegurabilidad):
             fila.get("OB MES VIGENTE", "")
         ).strip().lower()
 
-        # Solo procesar los que cruzaron como Mora > 90
-        if ob_mes_vigente != "mora > 90":
+        # Solo procesar los que cruzaron como Renovar
+        if ob_mes_vigente != "renovar":
             no_procesados += 1
             continue
 
-        mora_texto = str(
-            fila.get("Mora", "")
-        ).strip()
+        fila["OB 3"] = "En renovacion anual"
+        fila["OB MES"] = "Asegurado"
+        fila["OBS EDWARD"] = "En renovacion Anual"
 
-        try:
-            mora = float(
-                mora_texto.replace(".", "").replace(",", ".")
-            )
-        except ValueError:
-            mora = 0
+        procesados += 1
 
-        # Validar que realmente tenga mora mayor a 90
-        if mora > 90:
-
-            fila["OB 3"] = "Mora > 90"
-            fila["OB MES"] = "Politica - Mora > 90"
-            fila["OBS EDWARD"] = "-"
-
-            procesados += 1
-
-        else:
-            no_procesados += 1
-
-    print("\n=== AJUSTE MORA MAYOR A 90 AUMENTOS CAPITAL ===")
+    print("\n=== AJUSTE RENOVAR AUMENTOS CAPITAL ===")
     print(f"Créditos procesados: {procesados}")
     print(f"Créditos no procesados: {no_procesados}")
 
