@@ -1,4 +1,4 @@
-def ajustar_saldo_menor(base_asegurabilidad):
+def ajustar_seguro_pu_finalizado(base_asegurabilidad):
 
     procesados = 0
     no_procesados = 0
@@ -13,23 +13,11 @@ def ajustar_saldo_menor(base_asegurabilidad):
             fila.get("OB DIC", "")
         ).strip().lower()
 
-        saldo_texto = str(
-            fila.get("SALDO", "")
-        ).strip()
-
-        try:
-            saldo = float(
-                saldo_texto.replace(".", "").replace(",", ".")
-            )
-        except ValueError:
-            saldo = 0
-
-        # Si ya viene identificado en el histórico como
-        # Politica - saldo menor, copiar el histórico.
-        if ob_dic == "politica - saldo menor":
+        # Solo procesar Politica - seguro PU Finalizado
+        if ob_dic == "politica - seguro pu finalizado":
 
             fila["OB 3"] = fila.get("OB ANTERIOR", "")
-            fila["OB MES"] = "Politica - saldo menor"
+            fila["OB MES"] = "Politica - seguro PU Finalizado"
             fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
             fila["FECHA FIN"] = fila.get("FECHA FN", "")
             fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
@@ -41,7 +29,7 @@ def ajustar_saldo_menor(base_asegurabilidad):
         else:
             no_procesados += 1
 
-    print("\n=== AJUSTE SALDO MENOR ===")
+    print("\n=== AJUSTE SEGURO PU FINALIZADO ===")
     print(f"Créditos procesados: {procesados}")
     print(f"Créditos no procesados: {no_procesados}")
 
