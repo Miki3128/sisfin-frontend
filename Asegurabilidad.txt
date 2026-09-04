@@ -1,53 +1,41 @@
-def cruzar_certificado_historico_vigentes(base_asegurabilidad, base_vigentes):
+def ajustar_castigados(base_asegurabilidad):
 
-    indice_vigentes = {}
-
-    for fila in base_vigentes:
-        certificado = str(
-            fila.get("NRO_DOCUM", "")
-        ).strip()
-
-        if certificado:
-            indice_vigentes[certificado] = fila
-
-    encontrados = 0
-    no_encontrados = 0
+    procesados = 0
+    no_procesados = 0
 
     for fila in base_asegurabilidad:
 
-        # Solo procesar registros que todavía no tienen OBS EDWARD
+        # Si OBS EDWARD ya tiene información, no tocar el registro
         if str(fila.get("OBS EDWARD", "")).strip():
             continue
 
-        certificado_historico = str(
-            fila.get("CERTIFICADO 2", "")
-        ).strip()
+        ob_dic = str(
+            fila.get("OB DIC", "")
+        ).strip().lower()
 
-        if certificado_historico in indice_vigentes:
+        estado_credito = str(
+            fila.get("ESTADO CREDITO", "")
+        ).strip().lower()
 
-            registro = indice_vigentes[certificado_historico]
+        # Solo procesar Politica - castigado
+        # cuando el estado actual del crédito sigue siendo castigado
+        if (
+            ob_dic == "politica - castigado"
+            and estado_credito == "castigado"
+        ):
 
-            fecha_inicio_vigentes = str(
-                registro.get("FECHA_INI", "")
-            ).strip()
+            fila["OB 3"] = "Castigado"
+            fila["OB MES"] = "Politica - castigado"
+            fila["POLIZA ZURICH"] = "Castigado"
+            fila["OBS EDWARD"] = "-"
 
-            if fecha_inicio_vigentes:
-
-                fila["OB 3"] = "Asegurado con fecha inicio y fin diferente"
-                fila["OB MES"] = "Asegurado"
-                fila["FECHA INICIO"] = fila.get("FECH INICIO 2", "")
-                fila["FECHA FIN"] = fila.get("FECHA FN", "")
-                fila["CERTIFICADO"] = fila.get("CERTIFICADO 2", "")
-                fila["POLIZA ZURICH"] = registro.get("POL_MAESTRA", "").strip()
-                fila["OBS EDWARD"] = "Asegurado en base zurich"
-
-                encontrados += 1
+            procesados += 1
 
         else:
-            no_encontrados += 1
+            no_procesados += 1
 
-    print("\n=== CRUCE CERTIFICADO HISTÓRICO VS VIGENTES ===")
-    print(f"Certificados encontrados: {encontrados}")
-    print(f"Certificados no encontrados: {no_encontrados}")
+    print("\n=== AJUSTE CREDITOS CASTIGADOS ===")
+    print(f"Créditos procesados: {procesados}")
+    print(f"Créditos no procesados: {no_procesados}")
 
     return base_asegurabilidad
