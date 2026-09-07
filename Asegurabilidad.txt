@@ -1,3 +1,16 @@
-Buen día.
+Buen día,
 
-Confirmo que al cliente se le realizó la devolución correspondiente a sus seguros a su cuenta. La respuesta en la que se confirma dicha devolución fue brindada en los casos [números de caso].
+En atención a la solicitud del cliente, nos permitimos informar lo siguiente:
+
+1. **Pólizas activas:** El cliente presenta actualmente dos pólizas activas:
+
+   * Seguro de Vida Obligatorio.
+   * Seguro AP Voluntario.
+
+2. **Saldo a favor por concepto de primas:** Se confirma que el cliente **sí presenta saldo a favor** por concepto de primas.
+
+3. **Carátulas de las pólizas:** Se adjuntan las carátulas correspondientes a las pólizas activas.
+
+4. **Vigencia de las pólizas:** Las vigencias correspondientes se encuentran detalladas en las respectivas carátulas que se adjuntan.
+
+Cordialmente,
