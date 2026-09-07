@@ -1,38 +1,36 @@
-def ajustar_endoso_no_cruzado(base_asegurabilidad):
+Buen día,
 
-    procesados = 0
-    no_procesados = 0
+En atención a la solicitud presentada, nos permitimos informar lo siguiente:
 
-    for fila in base_asegurabilidad:
+**1. Compañía aseguradora, número de póliza y certificado individual**
 
-        # OB MES debe estar vacío
-        ob_mes = str(
-            fila.get("OB MES", "")
-        ).strip()
+La información correspondiente a la compañía aseguradora, número de póliza y certificado individual se encuentra relacionada en la **carátula y certificado del seguro de vida que se adjuntan**.
 
-        if ob_mes:
-            no_procesados += 1
-            continue
+**2. Documentación del contrato de seguro**
 
-        # OB DIC debe ser Endosada
-        ob_dic = str(
-            fila.get("OB DIC", "")
-        ).strip().lower()
+Se adjunta la documentación disponible correspondiente al seguro de vida, en la cual se encuentran la carátula, certificado individual, condiciones y demás documentos aplicables al contrato de seguro.
 
-        if ob_dic != "endosada":
-            no_procesados += 1
-            continue
+**3. Coberturas, exclusiones y demás condiciones**
 
-        # Si llegó hasta aquí significa que no cruzó
-        # con una póliza vigente de Base Endosos
-        fila["OB 3"] = "Forzar"
-        fila["OB MES"] = "Politica - forzar"
-        fila["OBS EDWARD"] = "Forzar"
+La información relacionada con las coberturas del seguro, incluyendo muerte, incapacidad total y permanente, exclusiones, períodos de carencia y valor asegurado, se encuentra detallada en la documentación del seguro que se adjunta.
 
-        procesados += 1
+**4. Documentación soporte**
 
-    print("\n=== AJUSTE ENDOSO NO CRUZADO ===")
-    print(f"Créditos procesados: {procesados}")
-    print(f"Créditos no procesados: {no_procesados}")
+Para efectos de atender la solicitud, se remite la documentación correspondiente al seguro de vida, donde podrá consultar las condiciones y características aplicables al certificado.
 
-    return base_asegurabilidad
+**5. Concepto "Valor Seguro de Vida: $1.844.640"**
+
+El valor de **$1.844.640** corresponde a la prima única del seguro de vida, calculada para cubrir la totalidad de la vigencia del seguro.
+
+De acuerdo con la carátula, el seguro tiene una vigencia comprendida entre el **28 de octubre de 2025 y el 27 de octubre de 2028**.
+
+Al tratarse de un seguro bajo modalidad de **prima única**, dicho valor corresponde a la cobertura durante la totalidad de la vigencia señalada.
+
+Tomando como fecha de referencia el **7 de septiembre de 2026**, y realizando una estimación proporcional del período transcurrido frente a la vigencia total del seguro, se estima lo siguiente:
+
+* **Valor efectivamente causado a la fecha:** aproximadamente **$530.000**.
+* **Valor pendiente por causar:** aproximadamente **$1.315.000**.
+
+Los valores indicados corresponden a una estimación proporcional de acuerdo con el tiempo transcurrido y pendiente de la vigencia del seguro, por lo cual pueden presentar variaciones frente a la causación exacta registrada en los sistemas.
+
+Cordialmente,
