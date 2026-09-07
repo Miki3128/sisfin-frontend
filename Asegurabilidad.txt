@@ -1,11 +1,11 @@
-def ajustar_poliza_vencida_endosos(base_asegurabilidad, año, mes):
+def ajustar_poliza_vigente_endosos(base_asegurabilidad, año, mes):
 
     procesados = 0
     no_procesados = 0
 
     for fila in base_asegurabilidad:
 
-        # Solo revisar los que quedaron como Endosada
+        # Solo revisar los que siguen como Endosada
         ob_mes = str(
             fila.get("OB MES", "")
         ).strip().lower()
@@ -15,7 +15,7 @@ def ajustar_poliza_vencida_endosos(base_asegurabilidad, año, mes):
             continue
 
         fecha_fin_texto = str(
-            fila.get("FECHA FIN", "")
+            fila.get("FECHA FIN ENDOSOS", "")
         ).strip()
 
         if not fecha_fin_texto:
@@ -23,7 +23,7 @@ def ajustar_poliza_vencida_endosos(base_asegurabilidad, año, mes):
             continue
 
         try:
-            fecha_fin = datetime.strptime(
+            fecha_fin_endosos = datetime.strptime(
                 fecha_fin_texto,
                 "%Y-%m-%d"
             )
@@ -31,7 +31,7 @@ def ajustar_poliza_vencida_endosos(base_asegurabilidad, año, mes):
         except ValueError:
 
             try:
-                fecha_fin = datetime.strptime(
+                fecha_fin_endosos = datetime.strptime(
                     fecha_fin_texto,
                     "%d/%m/%Y"
                 )
@@ -40,20 +40,29 @@ def ajustar_poliza_vencida_endosos(base_asegurabilidad, año, mes):
                 no_procesados += 1
                 continue
 
-        # Validar que FECHA FIN sea del mes que estamos procesando
+        # La fecha debe ser posterior al mes que estamos procesando
         if (
-            fecha_fin.year == año
-            and fecha_fin.month == mes
+            fecha_fin_endosos.year > año
+            or (
+                fecha_fin_endosos.year == año
+                and fecha_fin_endosos.month > mes
+            )
         ):
 
-            fila["CERTIFICADO"] = "Poliza Vencida"
+            fila["CERTIFICADO"] = "Poliza Vigente"
+            fila["FECHA INICIO"] = fila.get(
+                "FECHA INICIO ENDOSOS", ""
+            )
+            fila["FECHA FIN"] = fila.get(
+                "FECHA FIN ENDOSOS", ""
+            )
 
             procesados += 1
 
         else:
             no_procesados += 1
 
-    print("\n=== AJUSTE POLIZA VENCIDA ENDOSOS ===")
+    print("\n=== AJUSTE POLIZA VIGENTE ENDOSOS ===")
     print(f"Créditos procesados: {procesados}")
     print(f"Créditos no procesados: {no_procesados}")
 
