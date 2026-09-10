@@ -1,4 +1,4 @@
 print(
     "Crédito:", credito,
-    "| Tipo de Prima 2:", modalidad
+    "| Modalidad encontrada:", repr(modalidad)
 )
