@@ -1,7 +1,28 @@
-def ajustar_saldo_menor(base_asegurabilidad):
+def ajustar_creditos_finalizados(base_asegurabilidad, año, mes):
 
     procesados = 0
     no_procesados = 0
+
+    # Calcular mes anterior y mes siguiente
+    mes_anterior = mes - 1
+    año_anterior = año
+
+    if mes_anterior == 0:
+        mes_anterior = 12
+        año_anterior -= 1
+
+    mes_siguiente = mes + 1
+    año_siguiente = año
+
+    if mes_siguiente == 13:
+        mes_siguiente = 1
+        año_siguiente += 1
+
+    meses_validos = [
+        (año_anterior, mes_anterior),
+        (año, mes),
+        (año_siguiente, mes_siguiente)
+    ]
 
     for fila in base_asegurabilidad:
 
@@ -14,28 +35,42 @@ def ajustar_saldo_menor(base_asegurabilidad):
             no_procesados += 1
             continue
 
-        # Leer SALDO
-        saldo_texto = str(
-            fila.get("SALDO", "")
+        fecha_texto = str(
+            fila.get("Fechafinal", "")
         ).strip()
 
-        if not saldo_texto:
+        if not fecha_texto:
             no_procesados += 1
             continue
 
         try:
-            saldo = float(
-                saldo_texto.replace(".", "").replace(",", ".")
+            fecha_final = datetime.strptime(
+                fecha_texto,
+                "%Y-%m-%d"
             )
+
         except ValueError:
-            no_procesados += 1
-            continue
 
-        # Solo procesar saldos menores a $1.000.000
-        if saldo < 1000000:
+            try:
+                fecha_final = datetime.strptime(
+                    fecha_texto,
+                    "%d/%m/%Y"
+                )
 
-            fila["OB 3"] = "Saldo menor"
-            fila["OB MES"] = "Politica - Saldo menor"
+            except ValueError:
+                no_procesados += 1
+                continue
+
+        periodo = (
+            fecha_final.year,
+            fecha_final.month
+        )
+
+        # Solo procesar junio, julio y agosto de 2026
+        if periodo in meses_validos:
+
+            fila["OB 3"] = "Credito finalizado"
+            fila["OB MES"] = "Politica - credito finalizado"
             fila["OBS EDWARD"] = "-"
 
             procesados += 1
@@ -43,7 +78,7 @@ def ajustar_saldo_menor(base_asegurabilidad):
         else:
             no_procesados += 1
 
-    print("\n=== AJUSTE SALDO MENOR ===")
+    print("\n=== AJUSTE CREDITOS FINALIZADOS ===")
     print(f"Créditos procesados: {procesados}")
     print(f"Créditos no procesados: {no_procesados}")
 
