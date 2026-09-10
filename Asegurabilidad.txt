@@ -1,5 +1,4 @@
 print(
     "Crédito:", credito,
-    "| Modalidad encontrada:",
-    registro.get("Modalidad_Seguro_Vida", "")
+    "| Tipo de Prima 2:", modalidad
 )
