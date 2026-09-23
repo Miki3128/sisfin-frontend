@@ -1,46 +1,34 @@
-def cruzar_modalidad_resumen_productos(base_asegurabilidad, resumen_productos):
+for fila in base_asegurabilidad:
 
-    indice_productos = {}
+    poliza_zurich = str(
+        fila.get("POLIZA ZURICH", "")
+    ).strip()
 
-    for fila in resumen_productos:
+    if poliza_zurich in indice_productos:
 
-        matriz = str(
-            fila.get("MATRIZ", "")
+        registro = indice_productos[poliza_zurich]
+
+        modalidad = str(
+            registro.get("PRIMA", "")
         ).strip()
 
-        if matriz:
-            indice_productos[matriz] = fila
+        if modalidad:
 
-    encontrados = 0
-    no_encontrados = 0
+            fila["Modalidad_Seguro_Vida"] = modalidad
+            fila["MODALIDAD POLIZA ACTUAL 2"] = modalidad
+            fila["MODALIDAD POLIZA ACTUAL"] = modalidad
 
-    for fila in base_asegurabilidad:
+            encontrados += 1
 
-        poliza_zurich = str(
-            fila.get("POLIZA ZURICH", "")
+    else:
+
+        modalidad_existente = str(
+            fila.get("Modalidad_Seguro_Vida", "")
         ).strip()
 
-        if poliza_zurich in indice_productos:
+        if modalidad_existente:
 
-            registro = indice_productos[poliza_zurich]
+            fila["MODALIDAD POLIZA ACTUAL 2"] = modalidad_existente
+            fila["MODALIDAD POLIZA ACTUAL"] = modalidad_existente
 
-            modalidad = str(
-                registro.get("PRIMA", "")
-            ).strip()
-
-            if modalidad:
-
-                fila["Modalidad_Seguro_Vida"] = modalidad
-                fila["MODALIDAD POLIZA ACTUAL 2"] = modalidad
-                fila["MODALIDAD POLIZA ACTUAL"] = modalidad
-
-                encontrados += 1
-
-        else:
-            no_encontrados += 1
-
-    print("\n=== CRUCE MODALIDAD RESUMEN PRODUCTOS ===")
-    print(f"Pólizas encontradas: {encontrados}")
-    print(f"Pólizas no encontradas: {no_encontrados}")
-
-    return base_asegurabilidad
+        no_encontrados += 1
