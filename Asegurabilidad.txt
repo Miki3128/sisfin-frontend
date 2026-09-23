@@ -1,3 +1,46 @@
-Buen día,
+def cruzar_modalidad_resumen_productos(base_asegurabilidad, resumen_productos):
 
-En el momento de la solicitud no se contaba con las fechas vigentes para el endoso remitido.
+    indice_productos = {}
+
+    for fila in resumen_productos:
+
+        matriz = str(
+            fila.get("MATRIZ", "")
+        ).strip()
+
+        if matriz:
+            indice_productos[matriz] = fila
+
+    encontrados = 0
+    no_encontrados = 0
+
+    for fila in base_asegurabilidad:
+
+        poliza_zurich = str(
+            fila.get("POLIZA ZURICH", "")
+        ).strip()
+
+        if poliza_zurich in indice_productos:
+
+            registro = indice_productos[poliza_zurich]
+
+            modalidad = str(
+                registro.get("PRIMA", "")
+            ).strip()
+
+            if modalidad:
+
+                fila["Modalidad_Seguro_Vida"] = modalidad
+                fila["MODALIDAD POLIZA ACTUAL 2"] = modalidad
+                fila["MODALIDAD POLIZA ACTUAL"] = modalidad
+
+                encontrados += 1
+
+        else:
+            no_encontrados += 1
+
+    print("\n=== CRUCE MODALIDAD RESUMEN PRODUCTOS ===")
+    print(f"Pólizas encontradas: {encontrados}")
+    print(f"Pólizas no encontradas: {no_encontrados}")
+
+    return base_asegurabilidad
