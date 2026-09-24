@@ -1,54 +1,44 @@
-1. De acuerdo al curso, los datos personales:
-a. Es cualquier dato que nos haga identificables ✅
-b. Deben ser protegidos por las empresas por norma ✅
-c. Pueden ser atacados por ciberdelincuentes ✅
 
-👉 Respuesta: f. Todas las anteriores
+1. ¿Qué es un contexto de entendimiento compartido?
 
-2. ¿Qué regulación que busca proteger los datos es internacional?
+✅ d. Es donde el significado de los mensajes es el mismo para todos los participantes
 
-👉 Respuesta: a. General Data Protection Regulation (GDPR) ✅
+2. ¿Cuál NO es un principio de entendimiento compartido?
 
-3. ¿Cuáles de estos derechos de protección de datos corresponden a la normativa internacional?
+Los principios mencionados incluyen visualizar, participación activa y cómo el cerebro genera significado.
 
-I. Derecho a vender sus datos ❌
-II. Derecho de acceso a la información ✅
-III. Derecho de modificar los datos que posee la empresa ✅
-IV. Derecho de conocer para qué necesita la empresa los datos ✅
+✅ c. Cómo el cerebro genera significado
 
-👉 Respuesta: c. II, III y IV ✅
+3. ¿Qué es el pensamiento visual?
 
-4. No se puede llegar a una protección de datos sin una seguridad de la información, porque:
+✅ d. El pensamiento visual es una metodología para crear, entender y gestionar contextos de entendimiento compartido.
 
-👉 Respuesta: a. Dentro de la información que busca proteger el sistema de seguridad están los datos ✅
+4. Herramientas que ayudan a crear contextos compartidos:
 
-La opción b dice que siempre estarán vulnerables al ataque, lo cual es demasiado absoluto, y la c no explica directamente la razón.
+Storyboard, facilitación gráfica, mapa de ruta y tablero Kanban son herramientas que pueden utilizarse.
 
-5. Un programa de seguridad debe cumplir con los siguientes objetivos clave:
+✅ e. Todas las anteriores
 
-I. Integridad ✅
-II. Responsabilidad ❌
-III. Confidencialidad ✅
-IV. Claridad ❌
-V. Disponibilidad ✅
+5. El Customer Journey nos permite:
 
-Son los tres pilares clásicos de seguridad de la información: confidencialidad, integridad y disponibilidad (CIA).
+I. Enfocarnos en los puntos a mantener y aquellos que deben mejorarse. ✅
+II. Visualizar todos los puntos de contacto que percibe el cliente respecto a los servicios. ✅
 
-👉 Respuesta: c. I, III y V ✅
+✅ c. I y II
 
-6. ¿Qué debes contemplar para crear una contraseña segura?
-a. No utilizar palabras que tengan relación contigo ✅
-b. No utilizar secuencias numéricas o del alfabeto ✅
-c. Utilizar palabras que no están en el diccionario ✅
+6. En una reunión activa:
 
-👉 Respuesta: d. Todas las anteriores ✅
-        modalidad_existente = str(
-            fila.get("Modalidad_Seguro_Vida", "")
-        ).strip()
+I. Se explora colaborativamente ✅
+II. Se dialoga ✅
+III. Se contextualiza y se aclaran dudas ✅
 
-        if modalidad_existente:
+✅ c. Todas las anteriores
 
-            fila["MODALIDAD POLIZA ACTUAL 2"] = modalidad_existente
-            fila["MODALIDAD POLIZA ACTUAL"] = modalidad_existente
+7. ¿Cuáles son las etapas de una reunión activa?
 
-        no_encontrados += 1
+I. Enfoque de tema ✅
+II. Divergencia ✅
+III. Exploración ✅
+IV. Convergencia ✅
+
+✅ c. Todas las anteriores
