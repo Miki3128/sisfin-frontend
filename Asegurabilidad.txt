@@ -1,44 +1,45 @@
+1. Reemplazar el “debería” por el “podría” es fundamental porque:
+A habla del miedo vs. amor.
+B explica que “debería” se enfoca en algo pendiente, mientras “podría” abre diferentes posibilidades.
+C habla de las motivaciones intrínsecas.
 
-1. ¿Qué es un contexto de entendimiento compartido?
+Por el enfoque del curso, las tres ideas forman parte del concepto.
 
-✅ d. Es donde el significado de los mensajes es el mismo para todos los participantes
+✅ Respuesta: d. Todas las anteriores
 
-2. ¿Cuál NO es un principio de entendimiento compartido?
+2. ¿En qué consiste el Sesgo de Negatividad?
 
-Los principios mencionados incluyen visualizar, participación activa y cómo el cerebro genera significado.
+La definición correcta es que nuestro cerebro tiene una tendencia biológica a prestar mayor atención a lo negativo, especialmente para detectar amenazas.
 
-✅ c. Cómo el cerebro genera significado
+✅ Respuesta: b. Es un mecanismo del ser humano que consiste en que nuestro cerebro está programado biológicamente para prestar más atención a los sucesos negativos y así detectar amenazas, que para registrar momentos positivos.
 
-3. ¿Qué es el pensamiento visual?
+3. La respuesta de lucha-huida en el Sistema Nervioso Simpático:
 
-✅ d. El pensamiento visual es una metodología para crear, entender y gestionar contextos de entendimiento compartido.
+I. Aumenta el ritmo cardíaco ✅
+II. Se desactivan procesos de pensamiento superior como la reflexión ✅
+III. Inunda el cuerpo de hormonas del estrés ✅
 
-4. Herramientas que ayudan a crear contextos compartidos:
+✅ Respuesta: d. Todas las anteriores
 
-Storyboard, facilitación gráfica, mapa de ruta y tablero Kanban son herramientas que pueden utilizarse.
+4. Técnica para intervenir en el estado del sistema nervioso, cambiando nuestra percepción y cómo nos sentimos:
 
-✅ e. Todas las anteriores
+La descripción corresponde a la técnica de respiración 4-7-8, que busca influir sobre el estado fisiológico y ayudar a regularlo.
 
-5. El Customer Journey nos permite:
+✅ Respuesta: a. Técnica de respiración 4-7-8
 
-I. Enfocarnos en los puntos a mantener y aquellos que deben mejorarse. ✅
-II. Visualizar todos los puntos de contacto que percibe el cliente respecto a los servicios. ✅
+5. De acuerdo al curso, la felicidad:
 
-✅ c. I y II
+I. No es algo externo que haya que alcanzar ✅
+II. Consiste en cómo elegimos vivir con nuestras determinadas experiencias ✅
+III. Depende del logro de nuestros objetivos ❌
+IV. Se puede vivir aún en momentos difíciles ✅
 
-6. En una reunión activa:
+Por lo tanto:
 
-I. Se explora colaborativamente ✅
-II. Se dialoga ✅
-III. Se contextualiza y se aclaran dudas ✅
+✅ Respuesta: b. I., II. y IV.
 
-✅ c. Todas las anteriores
+6. La técnica de enfocarse en lo positivo consiste en:
 
-7. ¿Cuáles son las etapas de una reunión activa?
+La idea es dirigir deliberadamente la atención hacia aquello positivo que nos rodea y hacia lo que queremos experimentar.
 
-I. Enfoque de tema ✅
-II. Divergencia ✅
-III. Exploración ✅
-IV. Convergencia ✅
-
-✅ c. Todas las anteriores
+✅ Respuesta: b. Enfocarse en todo lo bueno que te rodea, para ver y experimentar aquello que quieres sentir.
