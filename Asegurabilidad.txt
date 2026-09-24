@@ -1,27 +1,47 @@
-for fila in base_asegurabilidad:
+1. De acuerdo al curso, los datos personales:
+a. Es cualquier dato que nos haga identificables ✅
+b. Deben ser protegidos por las empresas por norma ✅
+c. Pueden ser atacados por ciberdelincuentes ✅
 
-    poliza_zurich = str(
-        fila.get("POLIZA ZURICH", "")
-    ).strip()
+👉 Respuesta: f. Todas las anteriores
 
-    if poliza_zurich in indice_productos:
+2. ¿Qué regulación que busca proteger los datos es internacional?
 
-        registro = indice_productos[poliza_zurich]
+👉 Respuesta: a. General Data Protection Regulation (GDPR) ✅
 
-        modalidad = str(
-            registro.get("PRIMA", "")
-        ).strip()
+3. ¿Cuáles de estos derechos de protección de datos corresponden a la normativa internacional?
 
-        if modalidad:
+I. Derecho a vender sus datos ❌
+II. Derecho de acceso a la información ✅
+III. Derecho de modificar los datos que posee la empresa ✅
+IV. Derecho de conocer para qué necesita la empresa los datos ✅
 
-            fila["Modalidad_Seguro_Vida"] = modalidad
-            fila["MODALIDAD POLIZA ACTUAL 2"] = modalidad
-            fila["MODALIDAD POLIZA ACTUAL"] = modalidad
+👉 Respuesta: c. II, III y IV ✅
 
-            encontrados += 1
+4. No se puede llegar a una protección de datos sin una seguridad de la información, porque:
 
-    else:
+👉 Respuesta: a. Dentro de la información que busca proteger el sistema de seguridad están los datos ✅
 
+La opción b dice que siempre estarán vulnerables al ataque, lo cual es demasiado absoluto, y la c no explica directamente la razón.
+
+5. Un programa de seguridad debe cumplir con los siguientes objetivos clave:
+
+I. Integridad ✅
+II. Responsabilidad ❌
+III. Confidencialidad ✅
+IV. Claridad ❌
+V. Disponibilidad ✅
+
+Son los tres pilares clásicos de seguridad de la información: confidencialidad, integridad y disponibilidad (CIA).
+
+👉 Respuesta: c. I, III y V ✅
+
+6. ¿Qué debes contemplar para crear una contraseña segura?
+a. No utilizar palabras que tengan relación contigo ✅
+b. No utilizar secuencias numéricas o del alfabeto ✅
+c. Utilizar palabras que no están en el diccionario ✅
+
+👉 Respuesta: d. Todas las anteriores ✅
         modalidad_existente = str(
             fila.get("Modalidad_Seguro_Vida", "")
         ).strip()
