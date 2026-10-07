@@ -1,3 +1,13 @@
+empresa = ""
+
+if credito.startswith("830"):
+    empresa = "VEHICULO SAN"
+
+elif credito.startswith("834"):
+    empresa = "VEHICULO MAZDA"
+
+
+
 @echo off
 python Mod.py
 pause
