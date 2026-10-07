@@ -1,10 +1,25 @@
+import csv
 
 R58 = "Bases/R58.csv"
 BASE_VIGENTES = "Vigentes/Base_Activo_PF_Vigentes.csv"
 
-registros_agregados = []
+COLUMNAS = [
+    "CRÉDITO",
+    "CEDULA",
+    "FECHA DESEMBOLSO",
+    "TIPO PF",
+    "FIN VIGENCIA",
+    "ESTADO",
+    "MORA",
+    "Estado Credito"
+]
 
-# Leer R58
+registros = []
+
+# ============================================================
+# LEER R58
+# ============================================================
+
 with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
     lector = csv.DictReader(archivo, delimiter=";")
 
@@ -13,7 +28,7 @@ with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
         if fila["ModalidadPF"].strip() != "Mensual":
             continue
 
-        registros_agregados.append([
+        registros.append([
             fila["crédito"].strip(),
             fila["Número identificación"].strip(),
             fila["Fecha Desembolso"].strip(),
@@ -25,13 +40,15 @@ with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
         ])
 
 
-# Agregar a Vigentes
-with open(
-    BASE_VIGENTES,
-    "a",
-    encoding="utf-8",
-    newline=""
-) as archivo:
+# ============================================================
+# CREAR BASE VIGENTES
+# ============================================================
+
+with open(BASE_VIGENTES, "w", encoding="utf-8-sig", newline="") as archivo:
+
+    # Esta línea le dice a Excel:
+    # "el separador de este archivo es ;"
+    archivo.write("sep=;\n")
 
     escritor = csv.writer(
         archivo,
@@ -39,8 +56,12 @@ with open(
         lineterminator="\n"
     )
 
-    for registro in registros_agregados:
-        escritor.writerow(registro)
+    # Encabezados
+    escritor.writerow(COLUMNAS)
+
+    # Registros
+    escritor.writerows(registros)
 
 
-print(f"Registros agregados: {len(registros_agregados)}")
+print(f"Registros agregados: {len(registros)}")
+print("Base Activo PF - Vigentes creada correctamente.")
