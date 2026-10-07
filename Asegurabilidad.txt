@@ -1,4 +1,5 @@
 import csv
+import os
 
 R58 = "Bases/R58.csv"
 BASE_VIGENTES = "Vigentes/Base_Activo_PF_Vigentes.csv"
@@ -16,10 +17,7 @@ COLUMNAS = [
 
 registros = []
 
-# ============================================================
-# LEER R58
-# ============================================================
-
+# Leer R58
 with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
     lector = csv.DictReader(archivo, delimiter=";")
 
@@ -40,15 +38,8 @@ with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
         ])
 
 
-# ============================================================
-# CREAR BASE VIGENTES
-# ============================================================
-
-with open(BASE_VIGENTES, "w", encoding="utf-8-sig", newline="") as archivo:
-
-    # Esta línea le dice a Excel:
-    # "el separador de este archivo es ;"
-    archivo.write("sep=;\n")
+# AGREGAR los nuevos registros sin borrar los anteriores
+with open(BASE_VIGENTES, "a", encoding="utf-8-sig", newline="") as archivo:
 
     escritor = csv.writer(
         archivo,
@@ -56,12 +47,14 @@ with open(BASE_VIGENTES, "w", encoding="utf-8-sig", newline="") as archivo:
         lineterminator="\n"
     )
 
-    # Encabezados
-    escritor.writerow(COLUMNAS)
+    # Si la base está vacía, primero coloca encabezados
+    if os.path.getsize(BASE_VIGENTES) == 0:
+        archivo.write("sep=;\n")
+        escritor.writerow(COLUMNAS)
 
-    # Registros
+    # Agrega únicamente los nuevos
     escritor.writerows(registros)
 
 
 print(f"Registros agregados: {len(registros)}")
-print("Base Activo PF - Vigentes creada correctamente.")
+print("Los datos anteriores de la base NO fueron modificados.")
