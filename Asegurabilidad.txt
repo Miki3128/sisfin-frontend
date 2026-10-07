@@ -1,77 +1,47 @@
 import csv
 
-
-# ==============================
-# RUTAS
-# ==============================
-
 R58 = "Bases/R58.csv"
 BASE_VIGENTES = "Vigentes/Base_Activo_PF_Vigentes.csv"
 
-
-# ==============================
-# LEER R58
-# ==============================
-
 registros_agregados = []
 
+# Leer R58
 with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
-
-    lector = csv.DictReader(archivo)
+    lector = csv.DictReader(archivo, delimiter=";")
 
     for fila in lector:
 
-        # Filtrar únicamente ModalidadPF = Mensual
         if fila["ModalidadPF"].strip() != "Mensual":
             continue
 
-        registro = {
-            "CRÉDITO": fila["crédito"].strip(),
-            "CEDULA": fila["Número identificación"].strip(),
-            "FECHA DESEMBOLSO": fila["Fecha Desembolso"].strip(),
-            "TIPO PF": "Mensual",
-            "FIN VIGENCIA": "Pago Mensual",
-            "ESTADO": "Si",
-            "MORA": "0",
-            "Estado Credito": "Vigente A"
-        }
-
-        registros_agregados.append(registro)
+        registros_agregados.append([
+            fila["crédito"].strip(),
+            fila["Número identificación"].strip(),
+            fila["Fecha Desembolso"].strip(),
+            "Mensual",
+            "Pago Mensual",
+            "Si",
+            "0",
+            "Vigente A"
+        ])
 
 
-# ==============================
-# AGREGAR A VIGENTES
-# ==============================
-
+# Agregar a Vigentes
 with open(
     BASE_VIGENTES,
     "a",
-    encoding="utf-8-sig",
+    encoding="utf-8",
     newline=""
 ) as archivo:
 
-    encabezados = [
-        "CRÉDITO",
-        "CEDULA",
-        "FECHA DESEMBOLSO",
-        "TIPO PF",
-        "FIN VIGENCIA",
-        "ESTADO",
-        "MORA",
-        "Estado Credito"
-    ]
-
-    escritor = csv.DictWriter(
+    escritor = csv.writer(
         archivo,
-        fieldnames=encabezados
+        delimiter=";",
+        lineterminator="\n"
     )
 
     for registro in registros_agregados:
         escritor.writerow(registro)
 
-
-# ==============================
-# RESULTADO
-# ==============================
 
 print(f"Registros agregados: {len(registros_agregados)}")
