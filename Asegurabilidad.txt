@@ -1,17 +1,16 @@
-import os
+nuevos = []
 
-BASE = os.path.dirname(os.path.abspath(__file__))
+for fila in registros:
+    nuevo = {
+        "CREDITO": fila["crédito"],
+        "CEDULA": fila["Número identificación"],
+        "FECHA DESEMBOLSO": fila["Fecha Desembolso"],
+        "TIPO PF": "Mensual",
+        "FIN VIGENCIA": "Pago Mensual",
+        "ESTADO": "Si",
+        "MORA": "0",
+        "Estado Credito": "Vigente A",
+        "EMPRESA": ""
+    }
 
-R58 = os.path.join(BASE, "Bases", "R58.csv")
-
-BASE_VIGENTES = os.path.join(
-    BASE,
-    "Vigentes",
-    "Base_Activo_PF_Vigentes.csv"
-)
-
-BASE_CANCELADO = os.path.join(
-    BASE,
-    "Cancelado",
-    "Base_Activo_PF_Cancelado.csv"
-)
+    nuevos.append(nuevo)
