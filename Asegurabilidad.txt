@@ -1,71 +1,8 @@
-# Filtrar restructurados con Tipo de prima 2 = Mensual
-reestructurados_mensual = filtrar_reestructurados_mensual(
-    reestructurados
-)
+print("\n--- RESUMEN REESTRUCTURADOS ---")
+print("Registros Mensuales revisados:", len(reestructurados_mensual))
+print("Registros agregados:", len(nuevos_reestructurados))
+print("Registros duplicados:", len(duplicados))
 
-
-# ==========================================
-# VALIDAR CRÉDITOS PARA NO DUPLICAR
-# ==========================================
-
-creditos_existentes = set()
-
-for fila in registros_finales:
-    creditos_existentes.add(
-        str(fila["CREDITO"]).strip()
-    )
-
-
-# ==========================================
-# AGREGAR REESTRUCTURADOS QUE NO EXISTAN
-# ==========================================
-
-nuevos_reestructurados = []
-
-for fila in reestructurados_mensual:
-
-    credito = str(
-        fila["Crédito Nuevo"]
-    ).strip()
-
-    if credito not in creditos_existentes:
-
-        nuevo = {
-            "CREDITO": credito,
-            "CEDULA": fila["cc/ce"],
-            "FECHA DESEMBOLSO": fila["Fechas"],
-            "TIPO PF": "Mensual",
-            "FIN VIGENCIA": "Pago Mensual",
-            "ESTADO": "Si",
-            "MORA": "0",
-            "Estado Credito": "Vigente A",
-            "EMPRESA": ""
-        }
-
-        nuevos_reestructurados.append(nuevo)
-
-        creditos_existentes.add(credito)
-
-
-# ==========================================
-# UNIR TODO
-# ==========================================
-
-registros_finales = (
-    registros_finales
-    + nuevos_reestructurados
-)
-
-
-# ==========================================
-# GUARDAR NUEVA BASE
-# ==========================================
-
-guardar_csv(
-    conexion.RESULTADO_VIGENTES,
-    registros_finales
-)
-
-
-print("\nBase Activo PF Nueva guardada correctamente")
-print(conexion.RESULTADO_VIGENTES)
+print("\nCréditos duplicados:")
+for credito in duplicados:
+    print(credito)
