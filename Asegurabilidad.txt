@@ -1,45 +1,69 @@
-1. Reemplazar el “debería” por el “podría” es fundamental porque:
-A habla del miedo vs. amor.
-B explica que “debería” se enfoca en algo pendiente, mientras “podría” abre diferentes posibilidades.
-C habla de las motivaciones intrínsecas.
+import csv
 
-Por el enfoque del curso, las tres ideas forman parte del concepto.
 
-✅ Respuesta: d. Todas las anteriores
+R58 = "Bases/R58.csv"
+BASE_ACTIVO_PF = "Bases/Base_Activo_PF.csv"
 
-2. ¿En qué consiste el Sesgo de Negatividad?
 
-La definición correcta es que nuestro cerebro tiene una tendencia biológica a prestar mayor atención a lo negativo, especialmente para detectar amenazas.
+# ==============================
+# LEER R58
+# ==============================
 
-✅ Respuesta: b. Es un mecanismo del ser humano que consiste en que nuestro cerebro está programado biológicamente para prestar más atención a los sucesos negativos y así detectar amenazas, que para registrar momentos positivos.
+nuevos_registros = []
 
-3. La respuesta de lucha-huida en el Sistema Nervioso Simpático:
+with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
+    lector = csv.DictReader(archivo)
 
-I. Aumenta el ritmo cardíaco ✅
-II. Se desactivan procesos de pensamiento superior como la reflexión ✅
-III. Inunda el cuerpo de hormonas del estrés ✅
+    for fila in lector:
 
-✅ Respuesta: d. Todas las anteriores
+        # Filtrar únicamente ModalidadPF = Mensual
+        if fila["ModalidadPF"].strip() != "Mensual":
+            continue
 
-4. Técnica para intervenir en el estado del sistema nervioso, cambiando nuestra percepción y cómo nos sentimos:
+        nuevo = {
+            "CRÉDITO": fila["crédito"].strip(),
+            "CEDULA": fila["Número identificación"].strip(),
+            "FECHA DESEMBOLSO": fila["Fecha Desembolso"].strip(),
+            "TIPO PF": "Mensual",
+            "FIN VIGENCIA": "Pago Mensual",
+            "ESTADO": "Si",
+            "MORA": "0",
+            "Estado Credito": "Vigente A"
+        }
 
-La descripción corresponde a la técnica de respiración 4-7-8, que busca influir sobre el estado fisiológico y ayudar a regularlo.
+        nuevos_registros.append(nuevo)
 
-✅ Respuesta: a. Técnica de respiración 4-7-8
 
-5. De acuerdo al curso, la felicidad:
+# ==============================
+# AGREGAR A LA BASE ACTIVO PF
+# ==============================
 
-I. No es algo externo que haya que alcanzar ✅
-II. Consiste en cómo elegimos vivir con nuestras determinadas experiencias ✅
-III. Depende del logro de nuestros objetivos ❌
-IV. Se puede vivir aún en momentos difíciles ✅
+encabezados = [
+    "CRÉDITO",
+    "CEDULA",
+    "FECHA DESEMBOLSO",
+    "TIPO PF",
+    "FIN VIGENCIA",
+    "ESTADO",
+    "MORA",
+    "Estado Credito"
+]
 
-Por lo tanto:
 
-✅ Respuesta: b. I., II. y IV.
+with open(
+    BASE_ACTIVO_PF,
+    "a",
+    encoding="utf-8-sig",
+    newline=""
+) as archivo:
 
-6. La técnica de enfocarse en lo positivo consiste en:
+    escritor = csv.DictWriter(
+        archivo,
+        fieldnames=encabezados
+    )
 
-La idea es dirigir deliberadamente la atención hacia aquello positivo que nos rodea y hacia lo que queremos experimentar.
+    for registro in nuevos_registros:
+        escritor.writerow(registro)
 
-✅ Respuesta: b. Enfocarse en todo lo bueno que te rodea, para ver y experimentar aquello que quieres sentir.
+
+print(f"Registros agregados: {len(nuevos_registros)}")
