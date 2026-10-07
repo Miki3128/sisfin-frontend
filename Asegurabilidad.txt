@@ -1,8 +1,3 @@
-print("\n--- RESUMEN REESTRUCTURADOS ---")
-print("Registros Mensuales revisados:", len(reestructurados_mensual))
-print("Registros agregados:", len(nuevos_reestructurados))
-print("Registros duplicados:", len(duplicados))
-
-print("\nCréditos duplicados:")
-for credito in duplicados:
-    print(credito)
+@echo off
+echo HOLA MICHELL
+pause
