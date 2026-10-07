@@ -1,82 +1,17 @@
-import csv
+import os
 
-R58 = "Bases/R58.csv"
-BASE_VIGENTES = "Vigentes/Base_Activo_PF_Vigentes.csv"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
-COLUMNAS = [
-    "CREDITO",
-    "CEDULA",
-    "FECHA DESEMBOLSO",
-    "TIPO PF",
-    "FIN VIGENCIA",
-    "ESTADO",
-    "MORA",
-    "Estado Credito",
-    "EMPRESA"
-]
+R58 = os.path.join(BASE, "Bases", "R58.csv")
 
-# ==========================================================
-# 1. LEER LA BASE ACTUAL COMPLETA
-# ==========================================================
+BASE_VIGENTES = os.path.join(
+    BASE,
+    "Vigentes",
+    "Base_Activo_PF_Vigentes.csv"
+)
 
-with open(BASE_VIGENTES, "r", encoding="utf-8-sig", newline="") as archivo:
-    lector = csv.DictReader(archivo, delimiter=";")
-    datos_actuales = list(lector)
-
-
-# ==========================================================
-# 2. LEER R58 Y PREPARAR LOS NUEVOS REGISTROS
-# ==========================================================
-
-registros_nuevos = []
-
-with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
-    lector = csv.DictReader(archivo, delimiter=";")
-
-    for fila in lector:
-
-        if fila["ModalidadPF"].strip() != "Mensual":
-            continue
-
-        nuevo = {
-            "CREDITO": fila["crédito"].strip(),
-            "CEDULA": fila["Número identificación"].strip(),
-            "FECHA DESEMBOLSO": fila["Fecha Desembolso"].strip(),
-            "TIPO PF": "Mensual",
-            "FIN VIGENCIA": "Pago Mensual",
-            "ESTADO": "Si",
-            "MORA": "0",
-            "Estado Credito": "Vigente A",
-            "EMPRESA": ""
-        }
-
-        registros_nuevos.append(nuevo)
-
-
-# ==========================================================
-# 3. AGREGAR LOS NUEVOS A LOS EXISTENTES
-# ==========================================================
-
-datos_actuales.extend(registros_nuevos)
-
-
-# ==========================================================
-# 4. GUARDAR LA BASE COMPLETA
-# ==========================================================
-
-with open(BASE_VIGENTES, "w", encoding="utf-8-sig", newline="") as archivo:
-
-    escritor = csv.DictWriter(
-        archivo,
-        fieldnames=COLUMNAS,
-        delimiter=";",
-        lineterminator="\n"
-    )
-
-    escritor.writeheader()
-    escritor.writerows(datos_actuales)
-
-
-print(f"Registros anteriores conservados: {len(datos_actuales) - len(registros_nuevos)}")
-print(f"Registros nuevos agregados: {len(registros_nuevos)}")
-print(f"Total de registros: {len(datos_actuales)}")
+BASE_CANCELADO = os.path.join(
+    BASE,
+    "Cancelado",
+    "Base_Activo_PF_Cancelado.csv"
+)
