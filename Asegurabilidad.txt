@@ -1,38 +1,10 @@
-from ler import leer_csv, guardar_csv
-from filtro import filtrar_mensual
-import conexion
+def filtrar_reestructurados_mensual(reestructurados):
 
-# Leer R58
-r58 = leer_csv(conexion.R58)
+    registros = []
 
-# Filtrar modalidad Mensual
-registros = filtrar_mensual(r58)
+    for fila in reestructurados:
 
-# Leer base original de Vigentes
-vigentes = leer_csv(conexion.BASE_VIGENTES)
+        if fila["Tipo de prima 2"].strip() == "Mensual":
+            registros.append(fila)
 
-# Convertir los registros de R58 al formato de Vigentes
-nuevos = []
-
-for fila in registros:
-    nuevo = {
-        "CREDITO": fila["crédito"],
-        "CEDULA": fila["Número identificación"],
-        "FECHA DESEMBOLSO": fila["Fecha Desembolso"],
-        "TIPO PF": "Mensual",
-        "FIN VIGENCIA": "Pago Mensual",
-        "ESTADO": "Si",
-        "MORA": "0",
-        "Estado Credito": "Vigente A",
-        "EMPRESA": ""
-    }
-
-    nuevos.append(nuevo)
-
-# Crear la nueva base
-registros_finales = vigentes + nuevos
-
-guardar_csv(
-    conexion.RESULTADO_VIGENTES,
-    registros_finales
-)
+    return registros
