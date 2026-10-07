@@ -1,45 +1,50 @@
 import csv
-import os
 
 R58 = "Bases/R58.csv"
 BASE_VIGENTES = "Vigentes/Base_Activo_PF_Vigentes.csv"
 
-COLUMNAS = [
-    "CRÉDITO",
-    "CEDULA",
-    "FECHA DESEMBOLSO",
-    "TIPO PF",
-    "FIN VIGENCIA",
-    "ESTADO",
-    "MORA",
-    "Estado Credito"
-]
+registros_nuevos = []
 
-registros = []
+# ==========================================================
+# 1. LEER R58
+# ==========================================================
 
-# Leer R58
 with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
     lector = csv.DictReader(archivo, delimiter=";")
 
     for fila in lector:
 
+        # Solo tomar ModalidadPF = Mensual
         if fila["ModalidadPF"].strip() != "Mensual":
             continue
 
-        registros.append([
-            fila["crédito"].strip(),
-            fila["Número identificación"].strip(),
-            fila["Fecha Desembolso"].strip(),
-            "Mensual",
-            "Pago Mensual",
-            "Si",
-            "0",
-            "Vigente A"
-        ])
+        registros_nuevos.append({
+            "CREDITO": fila["crédito"].strip(),
+            "CEDULA": fila["Número identificación"].strip(),
+            "FECHA DESEMBOLSO": fila["Fecha Desembolso"].strip(),
+            "TIPO PF": "Mensual",
+            "FIN VIGENCIA": "Pago Mensual",
+            "ESTADO": "Si",
+            "MORA": "0",
+            "Estado Credito": "Vigente A"
+        })
 
 
-# AGREGAR los nuevos registros sin borrar los anteriores
-with open(BASE_VIGENTES, "a", encoding="utf-8-sig", newline="") as archivo:
+# ==========================================================
+# 2. LEER SOLAMENTE LOS ENCABEZADOS DE LA BASE ACTUAL
+#    NO SE MODIFICA NINGÚN DATO EXISTENTE
+# ==========================================================
+
+with open(BASE_VIGENTES, "r", encoding="utf-8-sig", newline="") as archivo:
+    lector = csv.reader(archivo, delimiter=";")
+    encabezados = next(lector)
+
+
+# ==========================================================
+# 3. AGREGAR LAS NUEVAS FILAS AL FINAL
+# ==========================================================
+
+with open(BASE_VIGENTES, "a", encoding="utf-8", newline="") as archivo:
 
     escritor = csv.writer(
         archivo,
@@ -47,14 +52,21 @@ with open(BASE_VIGENTES, "a", encoding="utf-8-sig", newline="") as archivo:
         lineterminator="\n"
     )
 
-    # Si la base está vacía, primero coloca encabezados
-    if os.path.getsize(BASE_VIGENTES) == 0:
-        archivo.write("sep=;\n")
-        escritor.writerow(COLUMNAS)
+    for registro in registros_nuevos:
 
-    # Agrega únicamente los nuevos
-    escritor.writerows(registros)
+        nueva_fila = []
+
+        # Colocar cada dato debajo de su encabezado correspondiente
+        for columna in encabezados:
+
+            if columna in registro:
+                nueva_fila.append(registro[columna])
+            else:
+                # EMPRESA queda vacía por ahora
+                nueva_fila.append("")
+
+        escritor.writerow(nueva_fila)
 
 
-print(f"Registros agregados: {len(registros)}")
-print("Los datos anteriores de la base NO fueron modificados.")
+print(f"Registros nuevos agregados: {len(registros_nuevos)}")
+print("Proceso terminado. Los datos anteriores no fueron modificados.")
