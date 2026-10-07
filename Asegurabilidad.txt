@@ -1,3 +1,17 @@
+from ler import leer_csv, guardar_csv
+from filtro import filtrar_mensual
+import conexion
+
+# Leer R58
+r58 = leer_csv(conexion.R58)
+
+# Filtrar modalidad Mensual
+registros = filtrar_mensual(r58)
+
+# Leer base original de Vigentes
+vigentes = leer_csv(conexion.BASE_VIGENTES)
+
+# Convertir los registros de R58 al formato de Vigentes
 nuevos = []
 
 for fila in registros:
@@ -14,3 +28,11 @@ for fila in registros:
     }
 
     nuevos.append(nuevo)
+
+# Crear la nueva base
+registros_finales = vigentes + nuevos
+
+guardar_csv(
+    conexion.RESULTADO_VIGENTES,
+    registros_finales
+)
