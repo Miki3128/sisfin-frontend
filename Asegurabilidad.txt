@@ -1,69 +1,102 @@
-import csv
-
-
-R58 = "Bases/R58.csv"
-BASE_ACTIVO_PF = "Bases/Base_Activo_PF.csv"
+import openpyxl
 
 
 # ==============================
-# LEER R58
+# RUTAS
 # ==============================
 
-nuevos_registros = []
-
-with open(R58, "r", encoding="utf-8-sig", newline="") as archivo:
-    lector = csv.DictReader(archivo)
-
-    for fila in lector:
-
-        # Filtrar únicamente ModalidadPF = Mensual
-        if fila["ModalidadPF"].strip() != "Mensual":
-            continue
-
-        nuevo = {
-            "CRÉDITO": fila["crédito"].strip(),
-            "CEDULA": fila["Número identificación"].strip(),
-            "FECHA DESEMBOLSO": fila["Fecha Desembolso"].strip(),
-            "TIPO PF": "Mensual",
-            "FIN VIGENCIA": "Pago Mensual",
-            "ESTADO": "Si",
-            "MORA": "0",
-            "Estado Credito": "Vigente A"
-        }
-
-        nuevos_registros.append(nuevo)
+R58 = "Bases/R58.xlsx"
+BASE_VIGENTES = "Vigentes/Base_Activo_PF_Vigentes.xlsx"
 
 
 # ==============================
-# AGREGAR A LA BASE ACTIVO PF
+# ABRIR ARCHIVOS
 # ==============================
 
-encabezados = [
-    "CRÉDITO",
-    "CEDULA",
-    "FECHA DESEMBOLSO",
-    "TIPO PF",
-    "FIN VIGENCIA",
-    "ESTADO",
-    "MORA",
-    "Estado Credito"
-]
+wb_r58 = openpyxl.load_workbook(R58, data_only=True)
+ws_r58 = wb_r58.active
+
+wb_vigentes = openpyxl.load_workbook(BASE_VIGENTES)
+ws_vigentes = wb_vigentes.active
 
 
-with open(
-    BASE_ACTIVO_PF,
-    "a",
-    encoding="utf-8-sig",
-    newline=""
-) as archivo:
+# ==============================
+# IDENTIFICAR ENCABEZADOS R58
+# ==============================
 
-    escritor = csv.DictWriter(
-        archivo,
-        fieldnames=encabezados
-    )
+encabezados_r58 = {}
 
-    for registro in nuevos_registros:
-        escritor.writerow(registro)
+for columna in range(1, ws_r58.max_column + 1):
+    encabezado = ws_r58.cell(row=1, column=columna).value
+
+    if encabezado:
+        encabezados_r58[str(encabezado).strip()] = columna
 
 
-print(f"Registros agregados: {len(nuevos_registros)}")
+# ==============================
+# COLUMNAS QUE NECESITAMOS
+# ==============================
+
+col_modalidad = encabezados_r58["ModalidadPF"]
+col_credito = encabezados_r58["crédito"]
+col_cedula = encabezados_r58["Número identificación"]
+col_fecha = encabezados_r58["Fecha Desembolso"]
+
+
+# ==============================
+# RECORRER R58
+# ==============================
+
+registros_agregados = 0
+
+for fila in range(2, ws_r58.max_row + 1):
+
+    modalidad = ws_r58.cell(
+        row=fila,
+        column=col_modalidad
+    ).value
+
+    # Solo ModalidadPF = Mensual
+    if str(modalidad).strip() != "Mensual":
+        continue
+
+    credito = ws_r58.cell(
+        row=fila,
+        column=col_credito
+    ).value
+
+    cedula = ws_r58.cell(
+        row=fila,
+        column=col_cedula
+    ).value
+
+    fecha_desembolso = ws_r58.cell(
+        row=fila,
+        column=col_fecha
+    ).value
+
+    # ==============================
+    # AGREGAR A VIGENTES
+    # ==============================
+
+    ws_vigentes.append([
+        credito,
+        cedula,
+        fecha_desembolso,
+        "Mensual",
+        "Pago Mensual",
+        "Si",
+        0,
+        "Vigente A"
+    ])
+
+    registros_agregados += 1
+
+
+# ==============================
+# GUARDAR
+# ==============================
+
+wb_vigentes.save(BASE_VIGENTES)
+
+print(f"Registros agregados: {registros_agregados}")
