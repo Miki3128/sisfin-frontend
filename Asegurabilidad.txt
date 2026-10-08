@@ -1,4 +1,12 @@
 
-    if str(fila.get("PROTECCION", "")).strip() == "SI":
+for fila in base_asegurabilidad:
+
+    print(
+        "PROTECCION:",
+        repr(fila.get("PROTECCION", "")),
+        "CREDITO:",
+        fila.get("Crédito", "")
+    )
+
+    if str(fila.get("PROTECCION", "")).strip().upper() == "SI":
         continue
-pause
