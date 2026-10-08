@@ -1,10 +1,26 @@
-empresa = ""
+def sumar_meses(fecha_str, meses):
+    try:
+        fecha = datetime.strptime(fecha_str, "%d/%m/%Y")
 
-if credito.startswith("830"):
-    empresa = "VEHICULO SAN"
+        mes = fecha.month - 1 + meses
+        año = fecha.year + mes // 12
+        mes = mes % 12 + 1
 
-elif credito.startswith("834"):
-    empresa = "VEHICULO MAZDA"
+        dia = min(
+            fecha.day,
+            calendar.monthrange(año, mes)[1]
+        )
+
+        nueva_fecha = fecha.replace(
+            year=año,
+        month=mes,
+            day=dia
+        )
+
+        return nueva_fecha.strftime("%d/%m/%Y")
+
+    except (ValueError, TypeError):
+        return fecha_str
 
 
 
