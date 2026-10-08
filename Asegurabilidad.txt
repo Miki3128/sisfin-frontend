@@ -1,27 +1,28 @@
-def sumar_meses(fecha_str, meses):
-    try:
-        fecha = datetime.strptime(fecha_str, "%d/%m/%Y")
+def ajustar_politica_revision(base_asegurabilidad):
 
-        mes = fecha.month - 1 + meses
-        año = fecha.year + mes // 12
-        mes = mes % 12 + 1
+    procesados = 0
 
-        dia = min(
-            fecha.day,
-            calendar.monthrange(año, mes)[1]
-        )
+    for fila in base_asegurabilidad:
 
-        nueva_fecha = fecha.replace(
-            year=año,
-        month=mes,
-            day=dia
-        )
+        ob_dic = str(
+            fila.get("OB DIC", "")
+        ).strip()
 
-        return nueva_fecha.strftime("%d/%m/%Y")
+        obs_edward = str(
+            fila.get("OBS EDWARD", "")
+        ).strip()
 
-    except (ValueError, TypeError):
-        return fecha_str
+        if not ob_dic and not obs_edward:
 
+            fila["OB DIC"] = "Política - Revisión"
+            fila["OBS EDWARD"] = "Política - Revisión"
+
+            procesados += 1
+
+    print("\n=== POLÍTICA - REVISIÓN ===")
+    print(f"Créditos enviados a revisión: {procesados}")
+
+    return base_asegurabilidad
 
 
 @echo off
