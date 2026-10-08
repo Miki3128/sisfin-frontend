@@ -4,27 +4,22 @@ def ajustar_politica_revision(base_asegurabilidad):
 
     for fila in base_asegurabilidad:
 
-        ob_dic = str(
-            fila.get("OB DIC", "")
-        ).strip()
+        ob_dic = str(fila.get("OB DIC", "")).strip()
+        obs_edward = str(fila.get("OBS EDWARD", "")).strip()
 
-        obs_edward = str(
-            fila.get("OBS EDWARD", "")
-        ).strip()
-
-        if not ob_dic and not obs_edward:
-
+        if not ob_dic:
             fila["OB DIC"] = "Política - Revisión"
+
+        if not obs_edward:
             fila["OBS EDWARD"] = "Política - Revisión"
 
+        if not ob_dic or not obs_edward:
             procesados += 1
 
     print("\n=== POLÍTICA - REVISIÓN ===")
     print(f"Créditos enviados a revisión: {procesados}")
 
     return base_asegurabilidad
-
-
 @echo off
 python Mod.py
 pause
