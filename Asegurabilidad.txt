@@ -1,12 +1,28 @@
 
-for fila in base_asegurabilidad:
+PGM184
 
-    print(
-        "PROTECCION:",
-        repr(fila.get("PROTECCION", "")),
-        "CREDITO:",
-        fila.get("Crédito", "")
-    )
+NMS889
 
-    if str(fila.get("PROTECCION", "")).strip().upper() == "SI":
-        continue
+NLU674
+
+PXP795
+
+JVU931
+
+PBT929
+
+NKZ459
+
+LTT638
+
+LHL612
+
+PHK544
+
+KUS972
+
+FSM899
+
+NYR543
+
+NMS879
